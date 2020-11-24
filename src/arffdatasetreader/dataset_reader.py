@@ -28,17 +28,17 @@ def process_dataset(dataset_type: str, fold_index: int) -> (np.ndarray, np.ndarr
 
 
 def process_num_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
-    print("Processing Numerical dataset...")
+    print(f"Processing Numerical Train and Test fold n°{fold_index}...")
 
     numerical_train_df, numerical_test_df = from_arff_to_pandas_dataframe(fold_index, path)
     numerical_test_df_without_class = numerical_test_df.drop(numerical_test_df.iloc[:, -1:], axis=1)
 
-    print(f"Numerical - Train and Test fold n°{fold_index} preprocessed. Matrices created.")
+    print("Numerical matrices created.")
     return numerical_train_df.to_numpy(), numerical_test_df_without_class.to_numpy()
 
 
 def process_cat_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
-    print("Processing Categorical dataset...")
+    print(f"Processing Categorical Train and Test fold n°{fold_index}...")
 
     categorical_test_df, categorical_train_df = from_arff_to_pandas_dataframe(fold_index, path)
     categorical_test_df_without_class = categorical_test_df.drop(categorical_test_df.iloc[:, -1:], axis=1)
@@ -52,15 +52,18 @@ def process_cat_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
     categorical_train_normalized = apply_normalization(categorical_train_df)
     categorical_test_normalized = apply_normalization(categorical_test_df_without_class)
 
-    print(f"Categorical - Train and Test fold n°{fold_index} preprocessed. Matrices created.")
+    print("Categorical matrices created.")
     return categorical_train_normalized.to_numpy(), categorical_test_normalized.to_numpy()
 
 
 def process_mix_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
-    print("Processing Mixed dataset...")
+    print(f"Processing Mixed Train and Test fold n°{fold_index}...")
 
     mixed_train_df, mixed_test_df = from_arff_to_pandas_dataframe(fold_index, path)
     mixed_test_df.drop(mixed_test_df.iloc[:, -1:], axis=1)
+
+    apply_decoding(mixed_train_df)
+    apply_decoding(mixed_test_df)
 
     dealing_with_missing_values(mixed_train_df)
     dealing_with_missing_values(mixed_test_df)
@@ -83,7 +86,7 @@ def process_mix_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
     mixed_train_normalized = apply_normalization(mixed_train_encoded)
     mixed_test_normalized = apply_normalization(mixed_test_encoded)
 
-    print(f"Mixed - Train and Test fold n°{fold_index} preprocessed. Matrices created.")
+    print("Mixed matrices created.")
     return mixed_train_normalized.to_numpy(), mixed_test_normalized.to_numpy()
 
 

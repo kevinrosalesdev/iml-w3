@@ -7,7 +7,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 def process_dataset(dataset_type: str, fold_index: int) -> (np.ndarray, np.ndarray):
 
-    accepted_ds_types = ['numerical', 'categorical', 'mixed']
+    accepted_ds_types = ['numerical', 'mixed']
     if dataset_type not in accepted_ds_types:
         raise ValueError(f"{dataset_type}:: not valid dataset type")
     if fold_index not in range(0, 10):
@@ -17,10 +17,6 @@ def process_dataset(dataset_type: str, fold_index: int) -> (np.ndarray, np.ndarr
     if dataset_type == 'numerical':
         num_ds_path = "datasets/pen-based/pen-based"
         return process_num_data(num_ds_path, fold_index)
-
-    if dataset_type == 'categorical':
-        cat_ds_path = "datasets/kropt/kropt"
-        return process_cat_data(cat_ds_path, fold_index)
 
     if dataset_type == 'mixed':
         mix_ds_path = "datasets/hypothyroid/hypothyroid"
@@ -35,25 +31,6 @@ def process_num_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
 
     print("Numerical matrices created.")
     return numerical_train_df.to_numpy(), numerical_test_df_without_class.to_numpy()
-
-
-def process_cat_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
-    print(f"Processing Categorical Train and Test fold n°{fold_index}...")
-
-    categorical_test_df, categorical_train_df = from_arff_to_pandas_dataframe(fold_index, path)
-    categorical_test_df_without_class = categorical_test_df.drop(categorical_test_df.iloc[:, -1:], axis=1)
-
-    apply_decoding(categorical_train_df)
-    apply_decoding(categorical_test_df_without_class)
-
-    apply_label_encoding(categorical_train_df, categorical_train_df.columns)
-    apply_label_encoding(categorical_test_df_without_class, categorical_test_df_without_class.columns)
-
-    categorical_train_normalized = apply_normalization(categorical_train_df)
-    categorical_test_normalized = apply_normalization(categorical_test_df_without_class)
-
-    print("Categorical matrices created.")
-    return categorical_train_normalized.to_numpy(), categorical_test_normalized.to_numpy()
 
 
 def process_mix_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
@@ -91,8 +68,8 @@ def process_mix_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
 
 
 def from_arff_to_pandas_dataframe(fold_index, path):
-    train_dataset, cat_train_meta = arff.loadarff(f"{path}.fold.00000{fold_index}.train.arff")
-    test_dataset, cat_test_meta = arff.loadarff(f"{path}.fold.00000{fold_index}.test.arff")
+    train_dataset, train_meta = arff.loadarff(f"{path}.fold.00000{fold_index}.train.arff")
+    test_dataset, test_meta = arff.loadarff(f"{path}.fold.00000{fold_index}.test.arff")
     train_df = pd.DataFrame(train_dataset)
     test_df = pd.DataFrame(test_dataset)
     return test_df, train_df
@@ -101,8 +78,8 @@ def from_arff_to_pandas_dataframe(fold_index, path):
 def apply_normalization(pandas_dataframe):
     # Normalizing to 0, 1
     sc = MinMaxScaler(feature_range=(0, 1))
-    categorical_values_normalized = sc.fit_transform(pandas_dataframe)
-    return pd.DataFrame(categorical_values_normalized, columns=pandas_dataframe.columns)
+    values_normalized = sc.fit_transform(pandas_dataframe)
+    return pd.DataFrame(values_normalized, columns=pandas_dataframe.columns)
 
 
 def apply_label_encoding(pandas_dataframe, columns):
@@ -113,7 +90,7 @@ def apply_label_encoding(pandas_dataframe, columns):
 
 
 def apply_decoding(pandas_dataframe):
-    # Decoding the dataset, these strings are in the form ustring_value'
+    # Decoding the dataset, these strings are in the form u'string_value'
     for column in pandas_dataframe:
         if pandas_dataframe[column].dtype == object:
             pandas_dataframe[column] = pandas_dataframe[column].str.decode('utf8')
@@ -147,7 +124,7 @@ def print_count_values_per_column(df: pd.DataFrame, columns: list, show_descript
 
 
 def get_ten_fold_preprocessed_dataset(dataset_type: str) -> (np.ndarray, np.ndarray):
-    accepted_ds_types = ['numerical', 'categorical', 'mixed']
+    accepted_ds_types = ['numerical', 'mixed']
     if dataset_type not in accepted_ds_types:
         raise ValueError(f"{dataset_type}:: not valid dataset type")
     train_matrices = []
@@ -161,8 +138,6 @@ def get_ten_fold_preprocessed_dataset(dataset_type: str) -> (np.ndarray, np.ndar
 
 def get_datasets() -> np.ndarray:
     num_train_matrices, num_test_matrices = get_ten_fold_preprocessed_dataset(dataset_type='numerical')
-    cat_train_matrices, cat_test_matrices = get_ten_fold_preprocessed_dataset(dataset_type='categorical')
     mix_train_matrices, mix_test_matrices = get_ten_fold_preprocessed_dataset(dataset_type='mixed')
     return [(num_train_matrices, num_test_matrices),
-            (cat_train_matrices, cat_test_matrices),
             (mix_train_matrices, mix_test_matrices)]

@@ -25,8 +25,20 @@ def kNNAlgorithm(train_matrix, test_matrix,
         print("Distances:\n", distances)
         print("Nearest Neighbors:\n", nearest_neighbors)
     elif distance == 'manhattan':
+
+        distances = [[np.abs(np.subtract(x, y)).sum() for y in train_samples] for x in test_matrix]
+
+        print(distances)
+        nearest_neighbors = np.argsort(distances, axis=1)[:, :k]
+        print("Distances:\n", distances)
+        print("Nearest Neighbors:\n", nearest_neighbors)
         pass  # TODO Alba
-    elif distance == 'X':
+    elif distance == 'chebychev':
+        distances = [[max(np.abs(np.subtract(x, y))) for y in train_samples] for x in test_matrix]
+        nearest_neighbors = np.argsort(distances, axis=1)[:, :k]
+        print("Distances:\n", distances)
+        print("Nearest Neighbors:\n", nearest_neighbors)
+
         pass  # TODO Alba
     else:
         print("[ERROR] Parameter '" + distance, "' cannot be a distance. Try with: 'euclidean', 'manhattan' or 'X'")
@@ -43,11 +55,31 @@ def kNNAlgorithm(train_matrix, test_matrix,
     predict_test_sample = [p2]
     """
     if policy == 'majority':
+        #If there is a tie, choose the first
+        a = np.concatenate(predict_nearest_neighbors, axis=0 )
+        c = Counter(a)
+        b = max(c.items(), key=operator.itemgetter(1))[0]
+        print("most commont", b, "counter: ", c)
         pass # TODO Alba
     elif policy == 'inverse_distance':
-        pass # TODO Alba
+        classes = list(set(real_classes))
+        print(classes)
+        votes = [[np.sum(
+            [1 / distances[test][train] if c == real_classes[train] else 0 for train in range(len(train_matrix))])
+                  for c in classes] for test in range(len(test_matrix))]
+        print('votes for each class in each test sample:', votes)
+        print('class for each test sample:', np.argmax(votes, axis=1))
+
+        pass  # TODO Alba
     elif policy == 'sheppard':
-        pass # TODO Alba
+        classes = list(set(real_classes))
+        print(classes)
+        votes = [[np.sum(
+            [np.exp(-distances[test][train]) if c == real_classes[train] else 0 for train in range(len(train_matrix))])
+                  for c in classes] for test in range(len(test_matrix))]
+        print('votes for each class in each test sample:', votes)
+        print('class for each test sample:', np.argmax(votes, axis=1))
+        pass  # TODO Alba
     else:
         print("[ERROR] Parameter '" + policy, "' cannot be a policy. Try with: 'majority', 'inverse_distance' "
                                               "or 'sheppard'")

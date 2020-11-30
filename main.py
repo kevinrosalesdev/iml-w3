@@ -1,24 +1,15 @@
 from arffdatasetreader import dataset_reader as dr
 from lazylearning import knn
 
-import numpy as np
-
 if __name__ == '__main__':
 
-    # datasets_preprocessed = dr.get_datasets()
-    # targets_labels = dr.get_datasets_target()
+    train_matrix, test_matrix = dr.process_dataset('mixed', 7)
+    train_matrices, test_matrices = dr.get_ten_fold_preprocessed_dataset('numerical')
+    datasets_preprocessed = dr.get_datasets()
 
-    train_matrix = np.array([[-1, 2, 0],
-                             [4, -1, 1],
-                             [5, 2, 1]])
+    # Problem with sizes. Train matrix should contain +1 column than test matrix.
+    print(train_matrix.shape)   # (378, 34)
+    print(test_matrix.shape)    # (3394, 35)
 
-    test_matrix = np.array([[-2, 3],
-                            [3, 1]])
-
-    predict = knn.kNNAlgorithm(train_matrix, test_matrix,
-                               k=2, distance='euclidean', policy='sheppard', weights=None)
-
-    print("====================")
-
-    # predict = knn.kNNAlgorithm(train_matrix, test_matrix,
-    #                            k=3, distance='euclidean', policy='majority', weights=None)
+    predictions = knn.kNNAlgorithm(train_matrix, test_matrix,
+                                   k=1, distance='euclidean', policy='majority', weights=None)

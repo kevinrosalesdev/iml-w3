@@ -20,10 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dac34f7e-c080-4cf4-8196-c1618c6de347" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utils/distances.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lazylearning/knn.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/lazylearning/knn.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +120,7 @@
       <workItem from="1606157971550" duration="265000" />
       <workItem from="1606158237414" duration="711000" />
       <workItem from="1606159398666" duration="5790000" />
-      <workItem from="1606763226760" duration="6057000" />
+      <workItem from="1606763226760" duration="6847000" />
     </task>
     <servers />
   </component>
@@ -146,22 +144,26 @@
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="767" y="297" width="447" height="520" key="FileChooserDialogImpl/72.27.1848.1053@72.27.1848.1053" timestamp="1606158234563" />
-    <state width="1802" height="283" key="GridCell.Tab.0.bottom" timestamp="1606769281968">
+    <state width="1802" height="283" key="GridCell.Tab.0.bottom" timestamp="1606769946768">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state width="1802" height="283" key="GridCell.Tab.0.bottom/72.27.1848.1053@72.27.1848.1053" timestamp="1606769281968" />
-    <state width="1802" height="283" key="GridCell.Tab.0.center" timestamp="1606769281968">
+    <state width="1802" height="283" key="GridCell.Tab.0.bottom/72.27.1848.1053@72.27.1848.1053" timestamp="1606769946768" />
+    <state width="1802" height="283" key="GridCell.Tab.0.center" timestamp="1606769946768">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state width="1802" height="283" key="GridCell.Tab.0.center/72.27.1848.1053@72.27.1848.1053" timestamp="1606769281968" />
-    <state width="1802" height="283" key="GridCell.Tab.0.left" timestamp="1606769281967">
+    <state width="1802" height="283" key="GridCell.Tab.0.center/72.27.1848.1053@72.27.1848.1053" timestamp="1606769946768" />
+    <state width="1802" height="283" key="GridCell.Tab.0.left" timestamp="1606769946767">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state width="1802" height="283" key="GridCell.Tab.0.left/72.27.1848.1053@72.27.1848.1053" timestamp="1606769281967" />
-    <state width="1802" height="283" key="GridCell.Tab.0.right" timestamp="1606769281968">
+    <state width="1802" height="283" key="GridCell.Tab.0.left/72.27.1848.1053@72.27.1848.1053" timestamp="1606769946767" />
+    <state width="1802" height="283" key="GridCell.Tab.0.right" timestamp="1606769946768">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state width="1802" height="283" key="GridCell.Tab.0.right/72.27.1848.1053@72.27.1848.1053" timestamp="1606769281968" />
+    <state width="1802" height="283" key="GridCell.Tab.0.right/72.27.1848.1053@72.27.1848.1053" timestamp="1606769946768" />
+    <state x="627" y="316" width="728" height="482" key="MultipleFileMergeDialog" timestamp="1606769598269">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="627" y="316" width="728" height="482" key="MultipleFileMergeDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1606769598269" />
     <state x="659" y="259" width="672" height="678" key="search.everywhere.popup" timestamp="1604797771244">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
@@ -169,6 +171,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/iml_w2$main.coverage" NAME="main Coverage Results" MODIFIED="1605473738899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/iml_w3$main.coverage" NAME="main Coverage Results" MODIFIED="1606769281963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/iml_w3$main.coverage" NAME="main Coverage Results" MODIFIED="1606769946759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

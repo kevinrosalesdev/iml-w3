@@ -6,7 +6,6 @@ from sklearn.preprocessing import MinMaxScaler
 
 
 def process_dataset(dataset_type: str, fold_index: int) -> (np.ndarray, np.ndarray):
-
     accepted_ds_types = ['numerical', 'mixed']
     if dataset_type not in accepted_ds_types:
         raise ValueError(f"{dataset_type}:: not valid dataset type")
@@ -47,11 +46,11 @@ def process_mix_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
 
     # Label encoding for double choice columns
     columns_label_encoding = ['sex', 'on_thyroxine', 'query_on_thyroxine',
-               'on_antithyroid_medication', 'sick', 'pregnant', 'thyroid_surgery',
-               'I131_treatment', 'query_hypothyroid', 'query_hyperthyroid', 'lithium',
-               'goitre', 'tumor', 'hypopituitary', 'psych', 'TSH_measured',
-               'T3_measured', 'TT4_measured', 'T4U_measured',
-               'FTI_measured']
+                              'on_antithyroid_medication', 'sick', 'pregnant', 'thyroid_surgery',
+                              'I131_treatment', 'query_hypothyroid', 'query_hyperthyroid', 'lithium',
+                              'goitre', 'tumor', 'hypopituitary', 'psych', 'TSH_measured',
+                              'T3_measured', 'TT4_measured', 'T4U_measured',
+                              'FTI_measured']
 
     apply_label_encoding(mixed_train_df, columns_label_encoding)
     apply_label_encoding(mixed_test_df, columns_label_encoding)

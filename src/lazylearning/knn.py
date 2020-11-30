@@ -1,9 +1,11 @@
 import numpy as np
-from sklearn.metrics.pairwise import euclidean_distances
+
+from collections import Counter
+from utils import distances as dt
 
 
 def kNNAlgorithm(train_matrix, test_matrix,
-                 k=1, distance='euclidean', policy='majority', weights='equal'):
+                 k=1, distance='euclidean', policy='majority', weights=None):
 
     print("k (number of neighbors):", k)
 
@@ -12,77 +14,56 @@ def kNNAlgorithm(train_matrix, test_matrix,
 
     train_samples = train_matrix[:, :-1]
     print("Train Samples:\n", train_samples)
-
     print("Test Samples:\n", test_matrix)
 
-    # TODO (for Week 2, not now!!) weights
-
-    # TODO now -> distance 'manhattan' and 'X'. Notice that we do not know yet if we can use sklearn's ones.
-    # TODO        So I will use them until tomorrow she gives us a response.
     if distance == 'euclidean':
-        distances = euclidean_distances(test_matrix, train_samples)
-        nearest_neighbors = np.argsort(distances, axis=1)[:, :k]
-        print("Distances:\n", distances)
-        print("Nearest Neighbors:\n", nearest_neighbors)
+        distances = dt.euclidean_distances(test_matrix, train_samples, weights)
     elif distance == 'manhattan':
-
+        # TODO : Put the computation of the distances in a function as it was done in euclidean distances. Let
+        #  'weights' be a possible parameter.
         distances = [[np.abs(np.subtract(x, y)).sum() for y in train_samples] for x in test_matrix]
-
-        print(distances)
-        nearest_neighbors = np.argsort(distances, axis=1)[:, :k]
-        print("Distances:\n", distances)
-        print("Nearest Neighbors:\n", nearest_neighbors)
-        pass  # TODO Alba
     elif distance == 'chebychev':
+        # TODO : Put the computation of the distances in a function as it was done in euclidean distances. Let
+        #  'weights' be a possible parameter.
         distances = [[max(np.abs(np.subtract(x, y))) for y in train_samples] for x in test_matrix]
-        nearest_neighbors = np.argsort(distances, axis=1)[:, :k]
-        print("Distances:\n", distances)
-        print("Nearest Neighbors:\n", nearest_neighbors)
-
-        pass  # TODO Alba
     else:
-        print("[ERROR] Parameter '" + distance, "' cannot be a distance. Try with: 'euclidean', 'manhattan' or 'X'")
+        print("[ERROR] Parameter '" + distance, "' cannot be a distance. Try with: 'euclidean', 'manhattan' "
+                                                "or 'chebychev'")
+
+    nearest_neighbors = np.argsort(distances, axis=1)[:, :k]
+
+    print("Distances:\n", distances)
+    print("Nearest Neighbors:\n", nearest_neighbors)
 
     predict_nearest_neighbors = [real_classes[nearest_neighbors[idx]] for idx in range(test_matrix.shape[0])]
     print("Prediction of nearest neighbors:\n", predict_nearest_neighbors)
 
-    """
-    Application of policy (majority)
-    ================================================
-    test_sample = [t1]
-    nearest_neighbors (k) = [n1_index, n2_index, n3_index, n4_index, n5_index]
-    predict_nearest_neighbors (k) = [p1, p2, p3, p2, p2]
-    predict_test_sample = [p2]
-    """
     if policy == 'majority':
-        #If there is a tie, choose the first
-        a = np.concatenate(predict_nearest_neighbors, axis=0 )
-        c = Counter(a)
-        b = max(c.items(), key=operator.itemgetter(1))[0]
-        print("most commont", b, "counter: ", c)
-        pass # TODO Alba
+        # If there is a tie, choose the first encountered
+        frequencies = [Counter(sample_prediction) for sample_prediction in predict_nearest_neighbors]
+        predictions = [frequencies[idx].most_common(1)[0][0] for idx in range(test_matrix.shape[0])]
+        print("Frequencies of predictions of each sample:" + str(frequencies))
+        print("Prediction of each sample: " + str(predictions))
     elif policy == 'inverse_distance':
-        classes = list(set(real_classes))
-        print(classes)
-        votes = [[np.sum(
-            [1 / distances[test][train] if c == real_classes[train] else 0 for train in range(len(train_matrix))])
-                  for c in classes] for test in range(len(test_matrix))]
-        print('votes for each class in each test sample:', votes)
-        print('class for each test sample:', np.argmax(votes, axis=1))
-
-        pass  # TODO Alba
+        votes = [[np.sum([1 / distances[test][neighbor] if c == real_classes[neighbor] else 0
+                          for neighbor in nearest_neighbors[test]])
+                  for c in list(set(real_classes))]
+                 for test in range(test_matrix.shape[0])]
+        predictions = np.argmax(votes, axis=1)
+        print('Votes for each class in each test sample:', votes)
+        # If there is a tie, choose the first encountered
+        print("Prediction of each sample: " + str(predictions))
     elif policy == 'sheppard':
-        classes = list(set(real_classes))
-        print(classes)
-        votes = [[np.sum(
-            [np.exp(-distances[test][train]) if c == real_classes[train] else 0 for train in range(len(train_matrix))])
-                  for c in classes] for test in range(len(test_matrix))]
-        print('votes for each class in each test sample:', votes)
-        print('class for each test sample:', np.argmax(votes, axis=1))
-        pass  # TODO Alba
+        votes = [[np.sum([np.exp(-distances[test][neighbor]) if c == real_classes[neighbor] else 0
+                          for neighbor in nearest_neighbors[test]])
+                  for c in list(set(real_classes))]
+                 for test in range(test_matrix.shape[0])]
+        predictions = np.argmax(votes, axis=1)
+        print('Votes for each class in each test sample:', votes)
+        # If there is a tie, choose the first encountered
+        print("Prediction of each sample: " + str(predictions))
     else:
         print("[ERROR] Parameter '" + policy, "' cannot be a policy. Try with: 'majority', 'inverse_distance' "
                                               "or 'sheppard'")
 
-    # TODO Alba: Remember to return a list of the predicted class for each sample of the test_matrix once the policy
-    # TODO       is applied!
+    return predictions

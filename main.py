@@ -16,9 +16,9 @@ if __name__ == '__main__':
                             [3, 1]])
 
     predict = knn.kNNAlgorithm(train_matrix, test_matrix,
-                               k=1, distance='euclidean', policy='majority', weights='equal')
+                               k=2, distance='euclidean', policy='sheppard', weights=None)
 
     print("====================")
 
-    predict = knn.kNNAlgorithm(train_matrix, test_matrix,
-                               k=2, distance='euclidean', policy='majority', weights='equal')
+    # predict = knn.kNNAlgorithm(train_matrix, test_matrix,
+    #                            k=3, distance='euclidean', policy='majority', weights=None)

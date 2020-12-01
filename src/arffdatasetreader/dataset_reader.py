@@ -28,7 +28,7 @@ def process_num_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
 
     numerical_train_df, numerical_test_df = from_arff_to_pandas_dataframe(fold_index, path)
     numerical_test_df_without_class = numerical_test_df.drop(numerical_test_df.iloc[:, -1:], axis=1)
-
+    apply_decoding(numerical_train_df)
     print("Numerical matrices created.")
     return numerical_train_df.to_numpy(), numerical_test_df_without_class.to_numpy()
 
@@ -72,7 +72,7 @@ def from_arff_to_pandas_dataframe(fold_index, path):
     test_dataset, test_meta = arff.loadarff(f"{path}.fold.00000{fold_index}.test.arff")
     train_df = pd.DataFrame(train_dataset)
     test_df = pd.DataFrame(test_dataset)
-    return test_df, train_df
+    return train_df, test_df
 
 
 def apply_normalization(pandas_dataframe):

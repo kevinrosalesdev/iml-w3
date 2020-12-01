@@ -1,0 +1,12 @@
+
+.idea/iml-w3.iml
+
+.idea/misc.xml
+
+.idea/workspace.xml
+
+src/arffdatasetreader/__pycache__/dataset_reader.cpython-36.pyc
+
+src/lazylearning/__pycache__/knn.cpython-36.pyc
+
+src/utils/__pycache__/distances.cpython-36.pyc

@@ -1,3 +1,5 @@
+from builtins import int
+
 from scipy.io import arff
 import pandas as pd
 import numpy as np
@@ -26,25 +28,29 @@ def process_num_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
     print(f"Processing Numerical Train and Test fold n°{fold_index}...")
 
     numerical_train_df, numerical_test_df = from_arff_to_pandas_dataframe(fold_index, path)
-    numerical_test_df_without_class = numerical_test_df.drop(numerical_test_df.iloc[:, -1:], axis=1)
+    numerical_test_df.drop(numerical_test_df.iloc[:, -1:], axis=1, inplace=True)
     apply_decoding(numerical_train_df)
     print("Numerical matrices created.")
-    return numerical_train_df.to_numpy(), numerical_test_df_without_class.to_numpy()
+    return numerical_train_df.to_numpy(), numerical_test_df.to_numpy()
 
 
 def process_mix_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
     print(f"Processing Mixed Train and Test fold n°{fold_index}...")
 
     mixed_train_df, mixed_test_df = from_arff_to_pandas_dataframe(fold_index, path)
-    mixed_test_df.drop(mixed_test_df.iloc[:, -1:], axis=1)
+    mixed_test_df.drop(mixed_test_df.iloc[:, -1:], axis=1, inplace=True)
 
     apply_decoding(mixed_train_df)
     apply_decoding(mixed_test_df)
 
-    dealing_with_missing_values(mixed_train_df)
-    dealing_with_missing_values(mixed_test_df)
+    # Saving train class column
+    train_class_column = mixed_train_df["Class"]
+    mixed_train_df.drop(mixed_train_df.iloc[:, -1:], axis=1, inplace=True)
 
-    # Label encoding for double choice columns
+    mixed_train_cleaned = dealing_with_missing_values(mixed_train_df)
+    mixed_test_cleaned = dealing_with_missing_values(mixed_test_df)
+
+    # Label encoding for binary columns
     columns_label_encoding = ['sex', 'on_thyroxine', 'query_on_thyroxine',
                               'on_antithyroid_medication', 'sick', 'pregnant', 'thyroid_surgery',
                               'I131_treatment', 'query_hypothyroid', 'query_hyperthyroid', 'lithium',
@@ -52,15 +58,18 @@ def process_mix_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
                               'T3_measured', 'TT4_measured', 'T4U_measured',
                               'FTI_measured']
 
-    apply_label_encoding(mixed_train_df, columns_label_encoding)
-    apply_label_encoding(mixed_test_df, columns_label_encoding)
+    apply_label_encoding(mixed_train_cleaned, columns_label_encoding)
+    apply_label_encoding(mixed_test_cleaned, columns_label_encoding)
 
     # One hot encoding for the last one 'referral source'
-    mixed_train_encoded = pd.get_dummies(mixed_train_df)
-    mixed_test_encoded = pd.get_dummies(mixed_test_df)
+    mixed_train_encoded = pd.get_dummies(mixed_train_cleaned)
+    mixed_test_encoded = pd.get_dummies(mixed_test_cleaned)
 
     mixed_train_normalized = apply_normalization(mixed_train_encoded)
     mixed_test_normalized = apply_normalization(mixed_test_encoded)
+
+    # Merging train class column to the rest of the processed train columns
+    mixed_train_normalized["Class"] = train_class_column
 
     print("Mixed matrices created.")
     return mixed_train_normalized.to_numpy(), mixed_test_normalized.to_numpy()
@@ -101,13 +110,14 @@ def dealing_with_missing_values(mixed_df):
     # Dropping column with just one distinct value
     mixed_df.drop('TBG_measured', axis=1, inplace=True)
     # Converting Unknown char from "?" to NaN and eliminate the corresponding rows
-    mixed_df = mixed_df.replace('?', np.nan)
+    mixed_df.replace('?', np.nan, inplace=True)
     # Dealing with missing values in continuous columns replacing them with the median value of each column
     # (the distribution of this column has very high std)
     columns_cont_with_missing_values = ['age', 'TSH', 'T3', 'TT4', 'T4U', 'FTI']
     for column_of_missing_values in columns_cont_with_missing_values:
-        mixed_df[column_of_missing_values].fillna(mixed_df[column_of_missing_values].median(), inplace=True, )
+        mixed_df[column_of_missing_values].fillna(mixed_df[column_of_missing_values].median(), inplace=True)
     mixed_df['sex'].fillna(mixed_df['sex'].value_counts().index[0], inplace=True)
+    return mixed_df
 
 
 def print_count_values_per_column(df: pd.DataFrame, columns: list, show_description: bool = False):

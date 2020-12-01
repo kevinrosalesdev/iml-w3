@@ -4,28 +4,25 @@ from collections import Counter
 from utils import distances as dt
 
 
-def kNNAlgorithm(train_matrix, test_matrix,
+def kNNAlgorithm(train_matrix, real_classes, test_matrix,
                  k=1, distance='euclidean', policy='majority', weights=None):
 
     print("k (number of neighbors):", k)
 
-    real_classes = train_matrix[:, train_matrix.shape[1]-1]
     print("Real classes:\n", real_classes)
-
-    train_samples = train_matrix[:, :-1]
-    print("Train Samples:\n", train_samples)
+    print("Train Samples:\n", train_matrix)
     print("Test Samples:\n", test_matrix)
 
     if distance == 'euclidean':
-        distances = dt.euclidean_distances(test_matrix, train_samples, weights)
+        distances = dt.euclidean_distances(test_matrix, train_matrix, weights)
     elif distance == 'manhattan':
         # TODO : Put the computation of the distances in a function as it was done in euclidean distances. Let
         #  'weights' be a possible parameter.
-        distances = [[np.abs(np.subtract(x, y)).sum() for y in train_samples] for x in test_matrix]
+        distances = [[np.abs(np.subtract(x, y)).sum() for y in train_matrix] for x in test_matrix]
     elif distance == 'chebychev':
         # TODO : Put the computation of the distances in a function as it was done in euclidean distances. Let
         #  'weights' be a possible parameter.
-        distances = [[max(np.abs(np.subtract(x, y))) for y in train_samples] for x in test_matrix]
+        distances = [[max(np.abs(np.subtract(x, y))) for y in train_matrix] for x in test_matrix]
     else:
         print("[ERROR] Parameter '" + distance, "' cannot be a distance. Try with: 'euclidean', 'manhattan' "
                                                 "or 'chebychev'")

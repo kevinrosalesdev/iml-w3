@@ -28,24 +28,36 @@ def process_num_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
     print(f"Processing Numerical Train and Test fold n°{fold_index}...")
 
     numerical_train_df, numerical_test_df = from_arff_to_pandas_dataframe(fold_index, path)
-    numerical_test_df.drop(numerical_test_df.iloc[:, -1:], axis=1, inplace=True)
     apply_decoding(numerical_train_df)
+    apply_decoding(numerical_test_df)
+
+    # Saving train class column
+    train_real_labels = numerical_train_df["a17"]
+    numerical_train_df.drop(numerical_train_df.iloc[:, -1:], axis=1, inplace=True)
+
+    # Saving test class column
+    test_real_labels = numerical_test_df["a17"]
+    numerical_test_df.drop(numerical_test_df.iloc[:, -1:], axis=1, inplace=True)
+
     print("Numerical matrices created.")
-    return numerical_train_df.to_numpy(), numerical_test_df.to_numpy()
+    return numerical_train_df.to_numpy(), train_real_labels.to_numpy(), numerical_test_df.to_numpy(), test_real_labels.to_numpy()
 
 
 def process_mix_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
     print(f"Processing Mixed Train and Test fold n°{fold_index}...")
 
     mixed_train_df, mixed_test_df = from_arff_to_pandas_dataframe(fold_index, path)
-    mixed_test_df.drop(mixed_test_df.iloc[:, -1:], axis=1, inplace=True)
 
     apply_decoding(mixed_train_df)
     apply_decoding(mixed_test_df)
 
     # Saving train class column
-    train_class_column = mixed_train_df["Class"]
+    train_real_labels = mixed_train_df["Class"]
     mixed_train_df.drop(mixed_train_df.iloc[:, -1:], axis=1, inplace=True)
+
+    # Saving test class column
+    test_real_labels = mixed_test_df["Class"]
+    mixed_test_df.drop(mixed_test_df.iloc[:, -1:], axis=1, inplace=True)
 
     mixed_train_cleaned = dealing_with_missing_values(mixed_train_df)
     mixed_test_cleaned = dealing_with_missing_values(mixed_test_df)
@@ -68,11 +80,8 @@ def process_mix_data(path: str, fold_index: int) -> (np.ndarray, np.ndarray):
     mixed_train_normalized = apply_normalization(mixed_train_encoded)
     mixed_test_normalized = apply_normalization(mixed_test_encoded)
 
-    # Merging train class column to the rest of the processed train columns
-    mixed_train_normalized["Class"] = train_class_column
-
     print("Mixed matrices created.")
-    return mixed_train_normalized.to_numpy(), mixed_test_normalized.to_numpy()
+    return mixed_train_normalized.to_numpy(), train_real_labels.to_numpy(), mixed_test_normalized.to_numpy(), test_real_labels.to_numpy()
 
 
 def from_arff_to_pandas_dataframe(fold_index, path):
@@ -137,16 +146,23 @@ def get_ten_fold_preprocessed_dataset(dataset_type: str) -> (np.ndarray, np.ndar
     if dataset_type not in accepted_ds_types:
         raise ValueError(f"{dataset_type}:: not valid dataset type")
     train_matrices = []
+    train_matrices_labels = []
     test_matrices = []
+    test_matrices_labels = []
     for fold_index in range(0, 10):
-        train_matrix, test_matrix = process_dataset(dataset_type, fold_index)
+        train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = process_dataset(dataset_type, fold_index)
+
         train_matrices.append(train_matrix)
+        train_matrices_labels.append(train_matrix_labels)
+
         test_matrices.append(test_matrix)
-    return train_matrices, test_matrices
+        test_matrices_labels.append(test_matrix_labels)
+
+    return train_matrices, train_matrices_labels,  test_matrices, test_matrices_labels
 
 
 def get_datasets() -> np.ndarray:
-    num_train_matrices, num_test_matrices = get_ten_fold_preprocessed_dataset(dataset_type='numerical')
-    mix_train_matrices, mix_test_matrices = get_ten_fold_preprocessed_dataset(dataset_type='mixed')
-    return [(num_train_matrices, num_test_matrices),
-            (mix_train_matrices, mix_test_matrices)]
+    num_train_matrices, num_train_matrices_labels, num_test_matrices, num_test_matrices_labels = get_ten_fold_preprocessed_dataset(dataset_type='numerical')
+    mix_train_matrices, mix_train_matrices_labels, mix_test_matrices, mix_test_matrices_labels = get_ten_fold_preprocessed_dataset(dataset_type='mixed')
+    return [(num_train_matrices, num_train_matrices_labels, num_test_matrices, num_test_matrices_labels),
+            (mix_train_matrices, mix_train_matrices_labels, mix_test_matrices, mix_test_matrices_labels)]

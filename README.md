@@ -3,8 +3,7 @@
 ## Datasets
 
 - Mixed: [`Hypothyorid`](datasets/) [Huge]
-- Nominal: [`Kropt`](datasets/) [Huge] 
-- Numerical:[`Pen-based`](datasets/) [Medium]
+- Nominal: [`Kropt`](datasets/) [Huge]
 
 > Remember to use git branches in order to avoid conflicts in code please!!
 >

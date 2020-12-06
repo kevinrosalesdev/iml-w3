@@ -1,6 +1,6 @@
 from arffdatasetreader import dataset_reader as dr
 from utils import weighting
-from lazylearning import knn
+from lazylearning.KnnAlgorithm import KnnAlgorithm
 import numpy as np
 
 if __name__ == '__main__':
@@ -28,19 +28,11 @@ if __name__ == '__main__':
 
     dataset = np.vstack((train_matrix, test_matrix))
     labels = np.vstack((train_matrix_labels, test_matrix_labels))
-    #print(weighting.get_relieff_weights(dataset, labels))
-    print(weighting.get_ig_weights(dataset, labels))
+    # print(weighting.get_relieff_weights(dataset, labels))
+    # print(weighting.get_ig_weights(dataset, labels))
 
-    #predictions = knn.kNNAlgorithm(train_matrix, train_matrix_labels, test_matrix,
-    #                                k=1, distance='euclidean', policy='majority', weights=None)
-
-    #predictions = knn.kNNAlgorithm(train_matrix, train_matrix_labels, test_matrix, k=1, distance='euclidean', policy='majority',
-    #                               weights=weighting.get_ig_weights(dataset, labels))
-
-    """
-    kNNAlgorithm.fit(train_matrix, train_labels)
-    predictions = kNNAlgorithm.predict(test_matrix)
-    accuracy = kNNAlgorithm.evaluate(test_labels, predictions)
-    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
-    """
-
+    knn = KnnAlgorithm(k=1, distance='euclidean', policy='majority', weights=None, verbosity=False)
+    knn.fit(train_matrix=train_matrix, train_labels=train_matrix_labels)
+    predictions = knn.predict(test_matrix)
+    accuracy, execution_time = knn.evaluate(test_matrix_labels, predictions)
+    print(accuracy, execution_time)

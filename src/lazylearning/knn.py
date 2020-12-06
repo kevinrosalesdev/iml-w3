@@ -8,9 +8,8 @@ def kNNAlgorithm(train_matrix, real_classes, test_matrix, k=1, distance='euclide
 
     print("k (number of neighbors):", k)
 
-    # real_classes = real_classes.T.reshape(-1).tolist()
-    #print("Real classes shape:\n", len(real_classes))
-    print("Real classes shape:\n", real_classes.shape)
+    real_classes = real_classes.T.reshape(-1)
+    print("Real classes shape:\n", len(real_classes))
     print("Train Samples shape:\n", train_matrix.shape)
     print("Test Samples shape:\n", test_matrix.shape)
     print("Real classes:\n", real_classes)

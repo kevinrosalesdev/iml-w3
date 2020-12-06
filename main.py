@@ -28,17 +28,19 @@ if __name__ == '__main__':
 
     dataset = np.vstack((train_matrix, test_matrix))
     labels = np.vstack((train_matrix_labels, test_matrix_labels))
-    # print(weighting.get_relieff_weights(dataset, labels))
+    #print(weighting.get_relieff_weights(dataset, labels))
+    print(weighting.get_ig_weights(dataset, labels))
 
-    predictions = knn.kNNAlgorithm(train_matrix, train_matrix_labels, test_matrix,
-                                    k=1, distance='euclidean', policy='majority', weights=None)
+    #predictions = knn.kNNAlgorithm(train_matrix, train_matrix_labels, test_matrix,
+    #                                k=1, distance='euclidean', policy='majority', weights=None)
 
     #predictions = knn.kNNAlgorithm(train_matrix, train_matrix_labels, test_matrix, k=1, distance='euclidean', policy='majority',
-     #                              weights=weighting.get_ig_weights(dataset, labels))
+    #                               weights=weighting.get_ig_weights(dataset, labels))
 
-    """kNNAlgorithm.fit(train_matrix, train_labels)
+    """
+    kNNAlgorithm.fit(train_matrix, train_labels)
     predictions = kNNAlgorithm.predict(test_matrix)
     accuracy = kNNAlgorithm.evaluate(test_labels, predictions)
     tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
-"""
+    """
 

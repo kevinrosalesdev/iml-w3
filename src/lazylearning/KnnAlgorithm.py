@@ -7,7 +7,7 @@ import math
 
 
 class KnnAlgorithm:
-    def __init__(self, k: int, distance: str, policy: str, weights=None, verbosity: bool = False):
+    def __init__(self, k: int = 3, distance: str = 'euclidean', policy: str = 'majority', weights=None, verbosity: bool = False):
         self.k = k
         self.distance = distance
         self.policy = policy
@@ -59,8 +59,9 @@ class KnnAlgorithm:
 
         predictions = self.use_policy(distances)
         toc = time.time()
-        self.execution_time = f"{math.trunc((toc - tic) / 60)}m {math.trunc((toc - tic) % 60)}s"
-
+        self.execution_time = toc - tic
+        if self.verbosity:
+            print(f"{math.trunc((toc - tic) / 60)}m {math.trunc((toc - tic) % 60)}s")
         return predictions
 
     def apply_majority_policy(self, *arg):

@@ -12,8 +12,8 @@ def evaluate_knn(dataset_type: str):
                                               'average_accuracy', 'average_efficiency'])
     ks = [1, 3, 5, 7]
     # ks = [1]
-    # distances = ['euclidean', 'manhattan', 'chebychev']
-    distances = ['euclidean']
+    distances = ['euclidean', 'manhattan', 'chebychev']
+    #distances = ['euclidean']
     policies = ['majority', 'inverse_distance', 'sheppard']
     # policies = ['majority']
     # weights = [None, 'ig']

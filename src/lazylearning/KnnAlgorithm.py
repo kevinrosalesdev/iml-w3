@@ -21,11 +21,11 @@ class KnnAlgorithm:
         self.execution_time = None
 
         if distance == 'euclidean':
-            self.use_distance = dt.euclidean_distances
+            self.compute_distance = dt.euclidean_distances
         elif distance == 'manhattan':
-            self.use_distance = dt.manhattan_distances
+            self.compute_distance = dt.manhattan_distances
         elif distance == 'chebychev':
-            self.use_distance = dt.chebychev_distances
+            self.compute_distance = dt.chebychev_distances
         else:
             raise ValueError(f"{distance}::Distance not valid.")
 
@@ -47,7 +47,7 @@ class KnnAlgorithm:
         print("Predicting...")
         tic = time.time()
         self.test_matrix = test_matrix
-        distances = self.use_distance(self.train_matrix, self.test_matrix, self.weights)
+        distances = self.compute_distance(self.test_matrix, self.train_matrix, self.weights)
         self.nearest_neighbors = np.argsort(distances, axis=1)[:, :self.k]
         if self.verbosity:
             print("Distances:\n", distances)

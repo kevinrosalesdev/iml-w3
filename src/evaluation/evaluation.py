@@ -3,22 +3,19 @@ from utils import weighting, plotter
 from lazylearning.KnnAlgorithm import KnnAlgorithm
 import pandas as pd
 from datetime import datetime
+import numpy as np
 
 
 def evaluate_knn(dataset_type: str):
-    dataset_names = {'mixed': 'Hypothyroid (mxd)',
-                     'numerical': 'Pen-based (num)'}
+    dataset_names = {'mixed': 'Hypothyroid (mxd)', 'numerical': 'Pen-based (num)'}
     dataframe_results = pd.DataFrame(columns=['dataset', 'number_of_k', 'distance', 'policy', 'weight',
                                               'average_accuracy', 'average_efficiency'])
     ks = [1, 3, 5, 7]
-    # ks = [1]
-    # distances = ['euclidean', 'manhattan', 'chebychev']
-    distances = ['euclidean']
+    distances = ['euclidean', 'manhattan', 'chebychev']
     policies = ['majority', 'inverse_distance', 'sheppard']
-    # policies = ['majority']
-    # weights = [None, 'ig']
-    weights = [None]
-    for weight in weights:
+    weight_type = [None, 'ig']
+    weights = None
+    for weight in weight_type:
         for distance in distances:
             for policy in policies:
                 average_accuracy_list = []
@@ -29,7 +26,8 @@ def evaluate_knn(dataset_type: str):
                           'w') as f:
                     for k in ks:
                         average_accuracy, average_efficiency = evaluate_all_params_knn(dataset_type, k, distance,
-                                                                                       policy, weight, title, f)
+                                                                                       policy, weight, weights,
+                                                                                       title, f)
                         average_accuracy_list.append(average_accuracy)
                         average_efficiency_list.append(average_efficiency)
                         dataframe_results = dataframe_results.append({'dataset': dataset_names[dataset_type],
@@ -46,7 +44,7 @@ def evaluate_knn(dataset_type: str):
     dataframe_results.to_csv(f"src/evaluation/dataset_results_{time_stamp}.csv", index=False)
 
 
-def evaluate_all_params_knn(dataset_type, k, distance, policy, weight, title, f):
+def evaluate_all_params_knn(dataset_type, k, distance, policy, weight_type, weights, title, f):
     accuracy_ten_fold = []
     execution_time_ten_fold = []
     train_matrices, train_matrices_labels, test_matrices, test_matrices_labels = dr.get_ten_fold_preprocessed_dataset(
@@ -66,8 +64,16 @@ def evaluate_all_params_knn(dataset_type, k, distance, policy, weight, title, f)
         train_matrix_labels = train_matrices_labels[index]
         test_matrix = test_matrices[index]
         test_matrix_labels = test_matrices_labels[index]
+        if weight_type is not None:
+            if weights is None:
+                dataset = np.vstack((train_matrix, test_matrix))
+                labels = np.vstack((train_matrix_labels, test_matrix_labels))
+                if weight_type == 'ig':
+                    weights = weighting.get_ig_weights(dataset, labels)
+                elif weight_type == 'relieff':
+                    weights = weighting.get_relieff_weights(dataset, labels)
 
-        knn = KnnAlgorithm(k=k, distance=distance, policy=policy, weights=weight, verbosity=False)
+        knn = KnnAlgorithm(k=k, distance=distance, policy=policy, weights=weights, verbosity=False)
         knn.fit(train_matrix=train_matrix, train_labels=train_matrix_labels)
         predictions = knn.predict(test_matrix)
         accuracy, execution_time = knn.evaluate(test_matrix_labels, predictions)

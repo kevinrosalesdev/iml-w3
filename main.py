@@ -15,13 +15,12 @@ if __name__ == '__main__':
     train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('numerical', 7,
                                                                                                 force_creation=False)
 
-
     # print(train_matrix.shape, test_matrix.shape)
 
     # dataset = np.vstack((train_matrix, test_matrix))
     # labels = np.vstack((train_matrix_labels, test_matrix_labels))
-    # print(weighting.get_relieff_weights(dataset, labels))
-    # print(weighting.get_ig_weights(dataset, labels))
+    # print("ReliefF weights:\n" + str(weighting.get_relieff_weights(dataset, labels)))
+    # print("IG weights:\n" + str(weighting.get_ig_weights(dataset, labels)))
 
     # knn = KnnAlgorithm(k=1, distance='euclidean', policy='majority', weights=None, verbosity=False)
     # knn.fit(train_matrix=train_matrix, train_labels=train_matrix_labels)

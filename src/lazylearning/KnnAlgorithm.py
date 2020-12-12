@@ -24,8 +24,8 @@ class KnnAlgorithm:
             self.compute_distance = dt.euclidean_distances
         elif distance == 'manhattan':
             self.compute_distance = dt.manhattan_distances
-        elif distance == 'chebychev':
-            self.compute_distance = dt.chebychev_distances
+        elif distance == 'chebyshev':
+            self.compute_distance = dt.chebyshev_distances
         else:
             raise ValueError(f"{distance}::Distance not valid.")
 

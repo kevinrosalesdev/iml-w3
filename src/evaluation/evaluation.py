@@ -11,7 +11,7 @@ def evaluate_knn(dataset_type: str):
     dataframe_results = pd.DataFrame(columns=['dataset', 'number_of_k', 'distance', 'policy', 'weight',
                                               'average_accuracy', 'average_efficiency'])
     ks = [1, 3, 5, 7]
-    distances = ['euclidean', 'manhattan', 'chebychev']
+    distances = ['euclidean', 'manhattan', 'chebyshev']
     policies = ['majority', 'inverse_distance', 'sheppard']
     weight_type = [None, 'ig']
     weights = None

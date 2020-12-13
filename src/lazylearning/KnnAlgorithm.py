@@ -44,8 +44,10 @@ class KnnAlgorithm:
         self.train_matrix = train_matrix
         self.train_labels = train_labels.T.reshape(-1)
 
-    def predict(self, test_matrix):
-        print("Predicting...")
+    def predict(self, test_matrix, print_info=True):
+        if print_info:
+            print("Predicting...")
+
         tic = time.time()
         self.test_matrix = test_matrix
         distances = self.compute_distance(self.test_matrix, self.train_matrix, self.weights)

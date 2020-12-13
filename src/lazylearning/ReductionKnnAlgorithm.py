@@ -9,8 +9,8 @@ class ReductionKnnAlgorithm(KnnAlgorithm):
         # TODO: Change 'X', 'Y' & 'Z' to your reduction technique name.
         if reduction_technique == 'X':
             self.train_matrix, self.train_labels = instance_selector.X(train_matrix, train_labels)
-        elif reduction_technique == 'Y':
-            self.train_matrix, self.train_labels = instance_selector.Y(train_matrix, train_labels)
+        elif reduction_technique == 'enn':
+            self.train_matrix, self.train_labels = instance_selector.enn(train_matrix, train_labels, self)
         elif reduction_technique == 'Z':
             self.train_matrix, self.train_labels = instance_selector.Z(train_matrix, train_labels)
         else:

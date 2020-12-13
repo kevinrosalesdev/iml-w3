@@ -1,8 +1,7 @@
 from arffdatasetreader import dataset_reader as dr
 from evaluation import evaluation
-from utils import weighting, plotter, distances
+from utils import weighting, plotter
 from lazylearning.KnnAlgorithm import KnnAlgorithm
-from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances
 import numpy as np
 
 if __name__ == '__main__':

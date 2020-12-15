@@ -1,12 +1,11 @@
 
 .idea/*
 
-src/arffdatasetreader/__pycache__/dataset_reader.cpython-36.pyc
-
-src/lazylearning/__pycache__/knn.cpython-36.pyc
-
-src/utils/__pycache__/distances.cpython-36.pyc
-
+src/arffdatasetreader/__pycache__/*
+src/lazylearning/__pycache__/*
+src/utils/__pycache__/*
+iml-w3/src/evaluation/__pycache__/*
+iml-w3/src/instanceselectors/__pycache__/*
 src/.DS_Store
 
 .DS_Store

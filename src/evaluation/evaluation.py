@@ -11,7 +11,7 @@ def evaluate_knn(dataset_type: str):
     dataframe_results = pd.DataFrame(columns=['dataset', 'number_of_k', 'distance', 'policy', 'weight',
                                               'average_accuracy', 'average_efficiency'])
     ks = [1, 3, 5, 7]
-    distances = ['euclidean', 'manhattan', 'chebychev']
+    distances = ['euclidean', 'manhattan', 'chebyshev']
     policies = ['majority', 'inverse_distance', 'sheppard']
     weight_type = [None, 'ig']
     weights = None
@@ -31,12 +31,13 @@ def evaluate_knn(dataset_type: str):
                         average_accuracy_list.append(average_accuracy)
                         average_efficiency_list.append(average_efficiency)
                         dataframe_results = dataframe_results.append({'dataset': dataset_names[dataset_type],
-                                                          'number_of_k': k,
-                                                          'distance': distance,
-                                                          'policy': policy,
-                                                          'weight': weight,
-                                                          'average_accuracy': average_accuracy,
-                                                          'average_efficiency': average_efficiency}, ignore_index=True)
+                                                                      'number_of_k': k,
+                                                                      'distance': distance,
+                                                                      'policy': policy,
+                                                                      'weight': weight,
+                                                                      'average_accuracy': average_accuracy,
+                                                                      'average_efficiency': average_efficiency},
+                                                                     ignore_index=True)
                     plotter.plot_accuracy(average_accuracy_list, title, file_title)
                     plotter.plot_efficiency(average_efficiency_list, title, file_title)
     date_time = datetime.now()

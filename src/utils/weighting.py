@@ -1,12 +1,15 @@
-import sklearn_relief as relief
 from sklearn.feature_selection import mutual_info_classif
+from ReliefF import ReliefF
+import numpy as np
 
 
 def get_relieff_weights(dataset, labels):
     labels = labels.T.reshape(-1)
-    relieff = relief.ReliefF()
-    relieff.fit(dataset, labels)
-    return relieff.w_
+    fs = ReliefF(n_neighbors=1000, n_features_to_keep=dataset.shape[1])
+    fs.fit(dataset, labels)
+
+    # Normalize the results between 0 and 1
+    return (fs.feature_scores-np.min(fs.feature_scores))/(np.max(fs.feature_scores)-np.min(fs.feature_scores))
 
 
 def get_ig_weights(dataset, labels):

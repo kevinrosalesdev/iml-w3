@@ -1,12 +1,16 @@
 
-.idea/iml-w3.iml
+.idea/
 
-.idea/misc.xml
+src/.DS_Store
 
-.idea/workspace.xml
+.DS_Store
 
-src/arffdatasetreader/__pycache__/dataset_reader.cpython-36.pyc
+src/arffdatasetreader/__pycache__/
 
-src/lazylearning/__pycache__/knn.cpython-36.pyc
+src/evaluation/__pycache__/
 
-src/utils/__pycache__/distances.cpython-36.pyc
+src/utils/__pycache__/
+
+src/lazylearning/__pycache__/
+
+src/instanceselectors/__pycache__/

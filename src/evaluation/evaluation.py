@@ -20,10 +20,10 @@ def evaluate_knn(dataset_type: str, plot_average_accuracy_efficiency=False):
     dataframe_fold_results = pd.DataFrame(columns=['number_of_k', 'distance', 'policy', 'weight',
                                                    'acc_fold0', 'acc_fold1', 'acc_fold2', 'acc_fold3', 'acc_fold4',
                                                    'acc_fold5', 'acc_fold6', 'acc_fold7', 'acc_fold8', 'acc_fold9'])
-    ks = [1]
-    distances = ['euclidean']
-    policies = ['majority']
-    weight_type = [None, 'ig']
+    ks = [1, 3, 5, 7]
+    distances = ['euclidean', 'manhattan', 'chebyshev']
+    policies = ['majority', 'inverse_distance', 'sheppard']
+    weight_type = [None, 'ig', 'relieff']
     start_time = datetime.now()
     train_matrices, train_matrices_labels, test_matrices, test_matrices_labels = dr.get_ten_fold_preprocessed_dataset(
         dataset_type)

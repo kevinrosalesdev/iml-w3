@@ -1,0 +1,20 @@
+---------------------------------------------------
+Evaluation for Hypothyroid (mxd) (reduced) - distance = euclidean, policy = majority, weight = None, reduction_technique = enn
+k = 1
+-----------------
+Fold n°0
+Accuracy: 0.9386666666666666
+Execution time: 8.9803786277771
+Storage: 0.9155136885487195
+-----------------
+Fold n°1
+Accuracy: 0.9285714285714286
+Execution time: 9.094435930252075
+Storage: 0.9142604596346494
+-----------------
+Fold n°2
+Accuracy: 0.9442970822281167
+Execution time: 8.904569864273071
+Storage: 0.9157584683357879
+-----------------
+Fold n°3

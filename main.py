@@ -68,5 +68,7 @@ if __name__ == '__main__':
     # evaluation.evaluate_knn_on_ten_folds(train_matrices, train_matrices_labels, test_matrices, test_matrices_labels, 1,
     #                                      'euclidean', 'majority', None, 'title')
     # evaluation.evaluate_knn('numerical', plot_average_accuracy_efficiency=False) # Total execution time = 1 day, 4:57:17.256373
-    parser.parse_txt()
+    evaluation.evaluate_knn('mixed', plot_average_accuracy_efficiency=False)
+    evaluation.evaluate_reduction_knn(1, 'euclidean', 'majority', None, 'mixed')
+    # parser.parse_txt()
 

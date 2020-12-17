@@ -16,4 +16,6 @@ class ReductionKnnAlgorithm(KnnAlgorithm):
         else:
             raise ValueError(f"{reduction_technique}::Reduction Technique not valid.")
 
+        return self.train_matrix.shape[0]/train_matrix.shape[0]
+
 

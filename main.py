@@ -5,6 +5,7 @@ from lazylearning.KnnAlgorithm import KnnAlgorithm
 from lazylearning.ReductionKnnAlgorithm import ReductionKnnAlgorithm
 import numpy as np
 import datetime
+from utils import parser
 
 if __name__ == '__main__':
     # train_matrices, train_matrices_labels,  test_matrices, test_matrices_labels = dr.get_ten_fold_preprocessed_dataset(
@@ -66,6 +67,6 @@ if __name__ == '__main__':
     # evaluation.evaluate_knn_with_both_datasets(plot_average_accuracy_efficiency=False)
     # evaluation.evaluate_knn_on_ten_folds(train_matrices, train_matrices_labels, test_matrices, test_matrices_labels, 1,
     #                                      'euclidean', 'majority', None, 'title')
-    evaluation.evaluate_knn('numerical', plot_average_accuracy_efficiency=False) # Total execution time = 1 day, 4:57:17.256373
-
+    # evaluation.evaluate_knn('numerical', plot_average_accuracy_efficiency=False) # Total execution time = 1 day, 4:57:17.256373
+    parser.parse_txt()
 

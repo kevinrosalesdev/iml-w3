@@ -98,9 +98,6 @@ def evaluate_reduction_knn(k, distance, policy, weight_type, dataset_type: str):
         dataset_type)
 
     weights = calculate_weights(weight_type, train_matrices, train_matrices_labels, test_matrices, test_matrices_labels)
-    average_accuracy_list = []
-    average_efficiency_list = []
-    average_storage_list = []
     for reduction_technique in reduction_techniques:
         title = f'{dataset_names[dataset_type]} (reduced) - distance = {distance}, policy = {policy}, ' \
                 f'weight = {weight_type}, reduction_technique = {reduction_technique}'
@@ -115,9 +112,7 @@ def evaluate_reduction_knn(k, distance, policy, weight_type, dataset_type: str):
                 policy, weights,
                 reduction_technique,
                 title, f)
-            average_accuracy_list.append(average_accuracy)
-            average_efficiency_list.append(average_efficiency)
-            average_storage_list.append(average_storage)
+
             dataframe_results = dataframe_results.append({'number_of_k': k,
                                                           'distance': distance,
                                                           'policy': policy,

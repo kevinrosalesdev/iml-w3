@@ -32,7 +32,7 @@ def evaluate_knn(dataset_type: str, plot_average_accuracy_efficiency=False):
                 average_efficiency_list = []
                 title = f'{dataset_names[dataset_type]} - distance = {distance}, policy = {policy}, weight = {weight}'
                 file_title = title.replace(' ', '').replace(',', '_')
-                with open(f'src/evaluation/{file_title}_result.txt',
+                with open(f'output/{file_title}_result.txt',
                           'w') as f:
                     for k in ks:
                         average_accuracy, average_efficiency = evaluate_knn_on_ten_folds(train_matrices,
@@ -57,7 +57,7 @@ def evaluate_knn(dataset_type: str, plot_average_accuracy_efficiency=False):
     date_time = datetime.now()
     print("Total execution time =", str(date_time-start_time))
     time_stamp = date_time.strftime("%Y-%m-%d-%H-%M-%S")
-    dataframe_results.to_csv(f"src/evaluation/results_{dataset_names[dataset_type].replace(' ', '')}_{time_stamp}.csv", index=False)
+    dataframe_results.to_csv(f"output/results_{dataset_names[dataset_type].replace(' ', '')}_{time_stamp}.csv", index=False)
 
 
 def calculate_weights(weight_type, train_matrices, train_matrices_labels, test_matrices, test_matrices_labels):

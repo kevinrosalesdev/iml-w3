@@ -58,7 +58,7 @@ if __name__ == '__main__':
     # accuracy, execution_time = knn.evaluate(test_matrix_labels, predictions)
     # print(accuracy, execution_time)
 
-    evaluation.evaluate_knn('mixed', plot_average_accuracy_efficiency=False) # Total execution time = 3:16:45.511944
+    # evaluation.evaluate_knn('mixed', plot_average_accuracy_efficiency=False) # Total execution time = 3:16:45.511944
     # average_accuracy_list = [0.8586822566933352, 0.9143757804897203, 0.77757804897203, 0.9743757804897203]
     # average_efficiency_list = [17.49811363220215, 18.34249014854431, 15.943757804897203, 16.943757804897203]
     # plotter.plot_accuracy(average_accuracy_list, title='Hypothyroid (mxd) - distance = euclidean, policy = majority, weight = None', file_title='accuracy')
@@ -66,4 +66,6 @@ if __name__ == '__main__':
     # evaluation.evaluate_knn_with_both_datasets(plot_average_accuracy_efficiency=False)
     # evaluation.evaluate_knn_on_ten_folds(train_matrices, train_matrices_labels, test_matrices, test_matrices_labels, 1,
     #                                      'euclidean', 'majority', None, 'title')
+    evaluation.evaluate_knn('numerical', plot_average_accuracy_efficiency=False) # Total execution time = 1 day, 4:57:17.256373
+
 

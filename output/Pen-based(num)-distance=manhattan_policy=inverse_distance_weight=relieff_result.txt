@@ -1,0 +1,188 @@
+---------------------------------------------------
+Evaluation for Pen-based (num) - distance = manhattan, policy = inverse_distance, weight = relieff
+k = 1
+-----------------
+Fold n°0
+Accuracy: 0.9890710382513661
+Execution time: 66.70563817024231
+-----------------
+Fold n°1
+Accuracy: 0.986351228389445
+Execution time: 66.31434226036072
+-----------------
+Fold n°2
+Accuracy: 0.9872379216043756
+Execution time: 66.46088600158691
+-----------------
+Fold n°3
+Accuracy: 0.9845454545454545
+Execution time: 65.866614818573
+-----------------
+Fold n°4
+Accuracy: 0.9899817850637522
+Execution time: 66.74418306350708
+-----------------
+Fold n°5
+Accuracy: 0.9899817850637522
+Execution time: 66.43487429618835
+-----------------
+Fold n°6
+Accuracy: 0.9891107078039928
+Execution time: 66.52141308784485
+-----------------
+Fold n°7
+Accuracy: 0.9863636363636363
+Execution time: 66.67492294311523
+-----------------
+Fold n°8
+Accuracy: 0.9927140255009107
+Execution time: 66.07537007331848
+-----------------
+Fold n°9
+Accuracy: 0.9882032667876588
+Execution time: 66.32761096954346
+*************
+Average accuracy: 0.9883560849374344
+Average efficiency: 66.41258556842804
+*************
+---------------------------------------------------
+Evaluation for Pen-based (num) - distance = manhattan, policy = inverse_distance, weight = relieff
+k = 3
+-----------------
+Fold n°0
+Accuracy: 0.98816029143898
+Execution time: 66.80249190330505
+-----------------
+Fold n°1
+Accuracy: 0.9881710646041856
+Execution time: 66.80384492874146
+-----------------
+Fold n°2
+Accuracy: 0.99179580674567
+Execution time: 66.98949408531189
+-----------------
+Fold n°3
+Accuracy: 0.9854545454545455
+Execution time: 66.2389669418335
+-----------------
+Fold n°4
+Accuracy: 0.9854280510018215
+Execution time: 66.14302086830139
+-----------------
+Fold n°5
+Accuracy: 0.9899817850637522
+Execution time: 65.35852217674255
+-----------------
+Fold n°6
+Accuracy: 0.9918330308529946
+Execution time: 66.23530197143555
+-----------------
+Fold n°7
+Accuracy: 0.9845454545454545
+Execution time: 66.21190905570984
+-----------------
+Fold n°8
+Accuracy: 0.9918032786885246
+Execution time: 66.24496102333069
+-----------------
+Fold n°9
+Accuracy: 0.9882032667876588
+Execution time: 66.82004475593567
+*************
+Average accuracy: 0.9885376575183586
+Average efficiency: 66.38485577106476
+*************
+---------------------------------------------------
+Evaluation for Pen-based (num) - distance = manhattan, policy = inverse_distance, weight = relieff
+k = 5
+-----------------
+Fold n°0
+Accuracy: 0.9872495446265938
+Execution time: 66.52778196334839
+-----------------
+Fold n°1
+Accuracy: 0.989080982711556
+Execution time: 66.48390197753906
+-----------------
+Fold n°2
+Accuracy: 0.9936189608021878
+Execution time: 66.70053100585938
+-----------------
+Fold n°3
+Accuracy: 0.9836363636363636
+Execution time: 66.66280007362366
+-----------------
+Fold n°4
+Accuracy: 0.9854280510018215
+Execution time: 66.80915093421936
+-----------------
+Fold n°5
+Accuracy: 0.9890710382513661
+Execution time: 67.08225798606873
+-----------------
+Fold n°6
+Accuracy: 0.9836660617059891
+Execution time: 67.13323903083801
+-----------------
+Fold n°7
+Accuracy: 0.9827272727272728
+Execution time: 66.01004481315613
+-----------------
+Fold n°8
+Accuracy: 0.9927140255009107
+Execution time: 66.00588893890381
+-----------------
+Fold n°9
+Accuracy: 0.9872958257713249
+Execution time: 66.66814804077148
+*************
+Average accuracy: 0.9874488126735386
+Average efficiency: 66.6083744764328
+*************
+---------------------------------------------------
+Evaluation for Pen-based (num) - distance = manhattan, policy = inverse_distance, weight = relieff
+k = 7
+-----------------
+Fold n°0
+Accuracy: 0.9845173041894353
+Execution time: 66.17976903915405
+-----------------
+Fold n°1
+Accuracy: 0.9854413102820746
+Execution time: 66.63014125823975
+-----------------
+Fold n°2
+Accuracy: 0.9899726526891522
+Execution time: 67.09107208251953
+-----------------
+Fold n°3
+Accuracy: 0.9845454545454545
+Execution time: 66.07915115356445
+-----------------
+Fold n°4
+Accuracy: 0.9836065573770492
+Execution time: 66.56456685066223
+-----------------
+Fold n°5
+Accuracy: 0.9899817850637522
+Execution time: 66.26411199569702
+-----------------
+Fold n°6
+Accuracy: 0.9863883847549909
+Execution time: 66.81645107269287
+-----------------
+Fold n°7
+Accuracy: 0.9827272727272728
+Execution time: 66.43592810630798
+-----------------
+Fold n°8
+Accuracy: 0.9908925318761385
+Execution time: 67.20696020126343
+-----------------
+Fold n°9
+Accuracy: 0.985480943738657
+Execution time: 66.00527906417847
+*************
+Average accuracy: 0.9863554197243978
+Average efficiency: 66.52734308242798
+*************

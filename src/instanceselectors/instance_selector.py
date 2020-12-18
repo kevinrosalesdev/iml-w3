@@ -1,5 +1,4 @@
 from lazylearning import ReductionKnnAlgorithm
-from utils import distances
 import numpy as np
 
 
@@ -28,6 +27,7 @@ def enn(train_matrix, train_labels, knn: ReductionKnnAlgorithm):
 
 def drop3(train_matrix, train_labels, knn: ReductionKnnAlgorithm):
     print("[Applying the ENN first...]")
+    print("[Applying the DROP3...]")
     knn.train_matrix, knn.train_labels = enn(train_matrix, train_labels, knn)
 
     returned_train_matrix = knn.train_matrix.copy()
@@ -49,7 +49,7 @@ def drop3(train_matrix, train_labels, knn: ReductionKnnAlgorithm):
 
     deleted_indexes = []
     for sample_index in range(returned_train_matrix.shape[0]):
-        print(f"Processing sample: {sample_index+1}/{returned_train_matrix.shape[0]}")
+        # print(f"Processing sample: {sample_index+1}/{returned_train_matrix.shape[0]}")
         if associates[sample_index].size == 0:
             deleted_indexes.append(sample_index)
             continue
@@ -73,9 +73,6 @@ def drop3(train_matrix, train_labels, knn: ReductionKnnAlgorithm):
 
             associates = [np.where(nearest_neighbors == index)[0]
                           for index in range(nearest_neighbors.shape[0])]
-
-        else:
-            sample_index += 1
 
     returned_train_matrix = np.delete(train_matrix, np.array(deleted_indexes), axis=0)
     returned_train_labels = np.delete(train_labels, np.array(deleted_indexes))

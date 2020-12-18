@@ -12,7 +12,7 @@ if __name__ == '__main__':
     #     'mixed', force_creation=True)
     # datasets_preprocessed = dr.get_datasets()
 
-    train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('numerical', 7,
+    train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('mixed', 7,
                                                                                                 force_creation=False)
     #
     # print(train_matrix.shape, test_matrix.shape)
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     #
     reductionKnn = ReductionKnnAlgorithm(k=3, distance='euclidean', policy='inverse_distance',
                                          weights=None, verbosity=False)
-    print(reductionKnn.fit(train_matrix=train_matrix, train_labels=train_matrix_labels, reduction_technique='drop3'))
+    print(reductionKnn.fit(train_matrix=train_matrix[:2000], train_labels=train_matrix_labels[:2000], reduction_technique='drop3'))
     predictions = reductionKnn.predict(test_matrix)
     accuracy, execution_time = reductionKnn.evaluate(test_matrix_labels, predictions)
     print(accuracy, execution_time)

@@ -9,6 +9,7 @@ def snn(train_matrix, train_labels):
     tic = time.time()
     distances = dt.euclidean_distances(train_matrix, train_matrix, None)
     ordered_matrix = np.argsort(distances, axis=1)
+
     """    
     tic = time.time()
     nearest_enemy = [next((nn for nn in instance if train_labels[nn] != train_labels[instance[0]]), None) for instance in ordered_matrix]
@@ -24,10 +25,7 @@ def snn(train_matrix, train_labels):
                 nearest_enemy.append(nn)
                 break
     print(time.time()-tic)
-    """ where Ai,j is set to 1 when instance j is of the same class as instance i , 
-    and it is closer to instance i than i’s nearest enemy, i.e., 
-    the nearest neighbor of i in T that is of a different class than i. 
-    Aii is always set to 1."""
+
     binary_matrix_numpy = np.zeros((len(train_matrix), len(train_matrix)))
     for i in range(len(binary_matrix_numpy)):
         for j in range(len(binary_matrix_numpy)):
@@ -46,134 +44,101 @@ def snn(train_matrix, train_labels):
         [0,0,0,1,0,0,0,1],
     ])
     train_matrix = np.array([[1],[2],[3],[4],[5],[6],[7],[8]])
-    binary_matrix = pd.DataFrame(binary_matrix_numpy, index=range(0, len(binary_matrix_numpy)))
+    binary_matrix = pd.DataFrame(binary_matrix_numpy)
 
-
-    """
-    For all columns i that have exactly one bit on, let j be the row with the bit on in column i. 
-    All columns with a bit on in row j are removed, row j is removed, and instance j is added to S.
-    """
     reduced_train = []
-    columns_dropped = set()
-    rows_dropped = set()
-    converged = False
-    while not converged:
-        no_change_step_1 = select_unitary_rows(binary_matrix, rows_dropped, columns_dropped, train_matrix, reduced_train)
-
-        test = binary_matrix.copy()
-        test = np.delete(test, list(rows_dropped), axis=0)
-        test = np.delete(test, list(columns_dropped), axis=1)
-
-        no_change_step_2 = drop_minor_rows(binary_matrix, rows_dropped)
-
-        test = binary_matrix.copy()
-        test = np.delete(test, list(rows_dropped), axis=0)
-        test = np.delete(test, list(columns_dropped), axis=1)
-
-        no_change_step_3 = drop_minor_columns(binary_matrix, columns_dropped)
-        test = binary_matrix.copy()
-        test = np.delete(test, list(rows_dropped), axis=0)
-        test = np.delete(test, list(columns_dropped), axis=1)
-
-        converged = no_change_step_1 and no_change_step_2 and no_change_step_3
-
-    test = binary_matrix.copy()
-    test = np.delete(test, list(rows_dropped), axis=0)
-    test = np.delete(test, list(columns_dropped), axis=1)
-    if len(columns_dropped) != len(binary_matrix):
-        print("Ah caray!")
-
-        return final_reduction(binary_matrix, rows_dropped, columns_dropped, train_matrix, reduced_train)
+    binary_matrix, _ = main_reduction(binary_matrix, train_matrix, reduced_train)
+    if binary_matrix.shape[1] > 0:
+        return recursive_reduction(binary_matrix, train_matrix, reduced_train)
     else:
         return reduced_train
 
-# search for the next sample that should be placed into the selective subset
-def final_reduction(binary_matrix, rows_dropped, columns_dropped, train_matrix, reduced_train):
-    absolute_minimum_additional_rows_for_tested_row = []
-    for row_index_to_test in range(len(binary_matrix)):
-        rows_dropped_test = rows_dropped.copy()
-        columns_dropped_test = columns_dropped.copy()
 
-        if row_index_to_test not in rows_dropped_test:
-            drop_row_and_bit_columns(binary_matrix, row_index_to_test, rows_dropped_test, columns_dropped_test)
-            list_of_sums = [(row_index, sum(binary_matrix[row_index, :])) for row_index in range(len(binary_matrix))
-                            if row_index not in rows_dropped_test]
-            list_of_sums.sort(key=lambda tup: tup[1], reverse=True)  # sorts in place
-            minimum_list = []
-            num_remaining_columns = len(binary_matrix) - len(columns_dropped_test)
-            total_sum = 0
-            for index, sum_of_ones in list_of_sums:
-                total_sum += sum_of_ones
-                minimum_list.append(index)
-                if total_sum >= num_remaining_columns:
-                    absolute_minimum_additional_rows_for_tested_row.append((row_index_to_test, minimum_list, total_sum))
-                    break
+def main_reduction(binary_matrix, train_matrix, reduced_train):
+    converged = False
+    tot_samples_added = 0
+    while not converged:
+        binary_matrix, num_samples_added, no_change_step_1 = select_unitary_rows(binary_matrix, train_matrix, reduced_train)
+        tot_samples_added += num_samples_added
+        binary_matrix, no_change_step_2 = drop_minor_rows(binary_matrix)
+        binary_matrix, no_change_step_3 = drop_major_columns(binary_matrix)
 
-    # sort for number of rows to delete asc and for sum of bits desc
-    absolute_minimum_additional_rows_for_tested_row.sort(key=lambda tup: (len(tup[1]), -tup[2]))
-
-    for row in absolute_minimum_additional_rows_for_tested_row[0]:
-        drop_row_and_bit_columns(binary_matrix, row, rows_dropped, columns_dropped)
-    print("Soy YO!")
+        converged = no_change_step_1 and no_change_step_2 and no_change_step_3
+    return binary_matrix, num_samples_added
 
 
-def drop_row_and_bit_columns(binary_matrix, row_index, rows_dropped, columns_dropped):
-    rows_dropped.add(row_index)
-    bit_columns = np.where(binary_matrix[row_index, :] == 1)
-    columns_dropped.update(bit_columns[0])
-
-
-def select_unitary_rows(binary_matrix, rows_dropped, columns_dropped, train_matrix, reduced_train):
+def select_unitary_rows(binary_matrix, train_matrix, reduced_train):
+    """passing all the columns and getting just the ones with one bit,
+        selecting for the subset S just the corresponding row to those bit"""
     no_changes = True
-    for col_index in range(len(binary_matrix)):
-        if col_index not in columns_dropped:
-            unitary_row = np.where(binary_matrix[:, col_index] == 1)
-            if len(unitary_row[0]) == 1:
-                selected_row = unitary_row[0][0]
-                if selected_row is not rows_dropped:
-                    rows_dropped.add(int(selected_row))
-                    columns_dropped.add(col_index)
-                    reduced_train.append(train_matrix[selected_row, :])
-                    no_changes = False
-    # double check if some columns are now with just one bit
-    if not no_changes:
-        for col_index in range(len(binary_matrix)):
-            if col_index not in columns_dropped:
-                if np.sum(binary_matrix[:, col_index]) == 1:
-                    columns_dropped.add(col_index)
-    return no_changes
+    num_samples_added = 0
+    selected_rows = binary_matrix[binary_matrix.sum() == 1]
+    selected_rows_index = selected_rows.index
+    if len(selected_rows_index) > 0:
+        # drop rows where columns sum up to 1
+        reduced_binary_matrix = binary_matrix[~(binary_matrix.sum() == 1)]
+        # drop columns where dropped rows had value of 1
+        reduced_binary_matrix = reduced_binary_matrix.loc[:, selected_rows.sum(axis=0) == 0]
+        # drop columns with only zeros (relative to the dropped rows with just one bit)
+        reduced_binary_matrix = reduced_binary_matrix.loc[:, (reduced_binary_matrix != 0).any(axis=0)]
+        # double check if some columns are now with just one bit
+        binary_matrix = reduced_binary_matrix.loc[:, reduced_binary_matrix.sum(axis=0) > 1]
+        reduced_train.append(train_matrix[selected_rows_index, :])
+        num_samples_added = len(selected_rows_index)
+        no_changes = False
+    return binary_matrix, num_samples_added, no_changes
 
 
-def drop_minor_rows(binary_matrix, rows_dropped):
+def drop_minor_rows(binary_matrix: pd.DataFrame):
+    """comparing two rows at the time deleting the one with all minor or equals values then the other"""
     no_changes = True
-    for row_index in range(len(binary_matrix) - 1):
-        if row_index not in rows_dropped:
-            for k in range(row_index + 1, len(binary_matrix)):
-                if k not in rows_dropped and all(binary_matrix[k, :] >= binary_matrix[row_index, :]):
-                    rows_dropped.add(row_index)
-                    no_changes = False
-                    break
-                if k not in rows_dropped and all(binary_matrix[k, :] <= binary_matrix[row_index, :]):
-                    rows_dropped.add(k)
-                    no_changes = False
-                    break
-    return no_changes
+    for idx in binary_matrix.index:
+        curr_row = binary_matrix.loc[idx]
+        curr_matrix = binary_matrix.drop(idx, axis=0)
+        if (curr_matrix >= curr_row).all(axis=1).any():
+            binary_matrix = curr_matrix
+            no_changes = False
+    return binary_matrix, no_changes
 
 
-def drop_minor_columns(binary_matrix, columns_dropped):
+def drop_major_columns(binary_matrix: pd.DataFrame):
+    """comparing two columns at the time deleting the one with all major or equals values then the other"""
     no_changes = True
-    for col_index in range(len(binary_matrix) - 1):
-        if col_index not in columns_dropped:
-            for k in range(col_index + 1, len(binary_matrix)):
-                if k not in columns_dropped and all(binary_matrix[:, k] >= binary_matrix[:, col_index]):
-                    columns_dropped.add(col_index)
-                    no_changes = False
-                    break
-                if k not in columns_dropped and all(binary_matrix[:, k] <= binary_matrix[:, col_index]):
-                    columns_dropped.add(k)
-                    no_changes = False
-                    break
-    return no_changes
+    for label in binary_matrix.columns:
+        curr_col = binary_matrix[label]
+        curr_matrix = binary_matrix.drop(label, axis=1)
+        print((curr_matrix <= curr_col).all(axis=0).any())
+        if (curr_matrix <= curr_col).all(axis=0).any():
+            binary_matrix = curr_matrix
+            no_changes = False
+    return binary_matrix, no_changes
+
+
+def recursive_reduction(binary_matrix, train_matrix, reduced_train):
+    """search for the next sample that should be placed into the selective subset"""
+    num_remaining_columns = binary_matrix.shape[1]
+    results_dict = dict()
+    sorted_sums = binary_matrix.sum(axis=1).sort_values(ascending=False)
+    for idx in binary_matrix.index:
+        cum_sums = sorted_sums.drop(idx).cumsum()
+        minimum_rows = len(cum_sums[cum_sums <= num_remaining_columns])
+        results_dict[idx] = minimum_rows
+    for absolute_min in set(results_dict.values()):
+        selected_labels = [k for k, v in results_dict.items() if v == absolute_min]
+        for row_label in selected_labels:
+            print(absolute_min, row_label)
+            # remove selected row and columns with 1 bits in the removed row
+            temp_binary_matrix = binary_matrix.copy()
+            subset_row = temp_binary_matrix.loc[row_label]
+            temp_binary_matrix = temp_binary_matrix.loc[:, subset_row == 0]
+            temp_binary_matrix.drop(row_label, inplace=True)
+            # Recursion
+            temp_binary_matrix, tot_samples_added = main_reduction(temp_binary_matrix, train_matrix, reduced_train)
+            if tot_samples_added == absolute_min:
+                return reduced_train
+            else:
+                reduced_train.pop(-tot_samples_added + 1)
+    return reduced_train
 
 
 def enn(train_matrix, train_labels, knn: ReductionKnnAlgorithm):

@@ -12,8 +12,8 @@ if __name__ == '__main__':
     #     'mixed', force_creation=True)
     # datasets_preprocessed = dr.get_datasets()
 
-    # train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('mixed', 7,
-    #                                                                                             force_creation=False)
+    train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('numerical', 7,
+                                                                                                force_creation=False)
     #
     # print(train_matrix.shape, test_matrix.shape)
 
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     # accuracy, execution_time = reductionKnn.evaluate(test_matrix_labels, predictions)
     # print(accuracy, execution_time)
     #
-    # knn = KnnAlgorithm(k=7, distance='euclidean', policy='inverse_distance',
+    # knn = KnnAlgorithm(k=3, distance='euclidean', policy='inverse_distance',
     #                    weights=None, verbosity=False)
     # knn.fit(train_matrix=train_matrix, train_labels=train_matrix_labels)
     # print(knn.train_matrix.shape)
@@ -43,13 +43,12 @@ if __name__ == '__main__':
     #
     # print(train_matrix.shape, test_matrix.shape)
     #
-    # reductionKnn = ReductionKnnAlgorithm(k=7, distance='euclidean', policy='inverse_distance',
-    #                                      weights=None, verbosity=False)
-    # reductionKnn.fit(train_matrix=train_matrix, train_labels=train_matrix_labels, reduction_technique='enn')
-    # print(reductionKnn.train_matrix.shape)
-    # predictions = reductionKnn.predict(test_matrix)
-    # accuracy, execution_time = reductionKnn.evaluate(test_matrix_labels, predictions)
-    # print(accuracy, execution_time)
+    reductionKnn = ReductionKnnAlgorithm(k=3, distance='euclidean', policy='inverse_distance',
+                                         weights=None, verbosity=False)
+    print(reductionKnn.fit(train_matrix=train_matrix, train_labels=train_matrix_labels, reduction_technique='drop3'))
+    predictions = reductionKnn.predict(test_matrix)
+    accuracy, execution_time = reductionKnn.evaluate(test_matrix_labels, predictions)
+    print(accuracy, execution_time)
     #
     # knn = KnnAlgorithm(k=7, distance='euclidean', policy='inverse_distance',
     #                    weights=None, verbosity=False)
@@ -68,7 +67,7 @@ if __name__ == '__main__':
     # evaluation.evaluate_knn_on_ten_folds(train_matrices, train_matrices_labels, test_matrices, test_matrices_labels, 1,
     #                                      'euclidean', 'majority', None, 'title')
     # evaluation.evaluate_knn('numerical', plot_average_accuracy_efficiency=False) # Total execution time = 1 day, 4:57:17.256373
-    evaluation.evaluate_knn('mixed', plot_average_accuracy_efficiency=False)
-    evaluation.evaluate_reduction_knn(1, 'euclidean', 'majority', None, 'mixed')
+    # evaluation.evaluate_knn('mixed', plot_average_accuracy_efficiency=False)
+    # evaluation.evaluate_reduction_knn(1, 'euclidean', 'majority', None, 'mixed')
     # parser.parse_txt()
 

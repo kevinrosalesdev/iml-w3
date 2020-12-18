@@ -27,8 +27,8 @@ def enn(train_matrix, train_labels, knn: ReductionKnnAlgorithm):
 
 def drop3(train_matrix, train_labels, knn: ReductionKnnAlgorithm):
     print("[Applying the ENN first...]")
-    print("[Applying the DROP3...]")
     knn.train_matrix, knn.train_labels = enn(train_matrix, train_labels, knn)
+    print("[Applying the DROP3...]")
 
     returned_train_matrix = knn.train_matrix.copy()
     returned_train_labels = knn.train_labels.copy()

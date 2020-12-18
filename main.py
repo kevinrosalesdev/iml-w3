@@ -6,14 +6,15 @@ from lazylearning.ReductionKnnAlgorithm import ReductionKnnAlgorithm
 import numpy as np
 import datetime
 from utils import parser
+from instanceselectors.instance_selector import snn
 
 if __name__ == '__main__':
     # train_matrices, train_matrices_labels,  test_matrices, test_matrices_labels = dr.get_ten_fold_preprocessed_dataset(
     #     'mixed', force_creation=True)
     # datasets_preprocessed = dr.get_datasets()
 
-    # train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('mixed', 7,
-    #                                                                                             force_creation=False)
+    train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('mixed', 7,
+                                                                                                 force_creation=False)
     #
     # print(train_matrix.shape, test_matrix.shape)
 
@@ -68,7 +69,7 @@ if __name__ == '__main__':
     # evaluation.evaluate_knn_on_ten_folds(train_matrices, train_matrices_labels, test_matrices, test_matrices_labels, 1,
     #                                      'euclidean', 'majority', None, 'title')
     # evaluation.evaluate_knn('numerical', plot_average_accuracy_efficiency=False) # Total execution time = 1 day, 4:57:17.256373
-    evaluation.evaluate_knn('mixed', plot_average_accuracy_efficiency=False)
-    evaluation.evaluate_reduction_knn(1, 'euclidean', 'majority', None, 'mixed')
+    # evaluation.evaluate_knn('mixed', plot_average_accuracy_efficiency=False)
+    # evaluation.evaluate_reduction_knn(1, 'euclidean', 'majority', None, 'mixed')
     # parser.parse_txt()
-
+    snn(train_matrix[:100, :], train_matrix_labels[:100, :])

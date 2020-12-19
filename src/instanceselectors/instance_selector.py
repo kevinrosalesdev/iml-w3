@@ -6,56 +6,45 @@ import pandas as pd
 
 
 def snn(train_matrix, train_labels):
-    print("Starting SNN reduction...")
-    tic = time.time()
+    print("[Applying the SNN...]")
     distances = dt.euclidean_distances(train_matrix, train_matrix, None)
     ordered_matrix = np.argsort(distances, axis=1)
-    print("argsort exec. time=", time.time()-tic)
+    nearest_enemy = get_nearest_enemy_list(ordered_matrix, train_labels)
 
-    tic = time.time()
-    nearest_enemy = []
-    for row in ordered_matrix:
-        # let's find the first nearest enemy
-        for nn in row:
-            if train_labels[row[0]] != train_labels[nn]:
-                nearest_enemy.append(nn)
-                break
-    print("N. enemy exec. time=", time.time()-tic)
-
-    tic = time.time()
     binary_matrix_numpy = np.zeros((len(train_matrix), len(train_matrix)), dtype='i1')
-    for i in range(binary_matrix_numpy.shape[1]):
-        for j in range(binary_matrix_numpy.shape[1]):
-            if train_labels[j] == train_labels[i] and distances[i, j] <= distances[i, nearest_enemy[i]]:
-                binary_matrix_numpy[i, j] = 1
-
-    # binary_matrix_numpy = np.array([
-    #     [1,0,0,0,0,1,0,0],
-    #     [0,1,0,0,0,0,1,0],
-    #     [0,0,1,0,0,0,0,0],
-    #     [0,1,0,1,1,0,0,0],
-    #     [0,0,0,0,1,0,1,0],
-    #     [0,0,1,0,0,1,0,0],
-    #     [0,0,0,1,0,0,1,0],
-    #     [0,0,0,1,0,0,0,1],
-    # ])
-    # train_matrix = np.array([[1],[2],[3],[4],[5],[6],[7],[8]])
-
-    binary_matrix = pd.DataFrame(binary_matrix_numpy)
-    print("Binary matrix exec. time=", time.time()-tic)
+    binary_matrix = create_binary_matrix_df(binary_matrix_numpy, distances, nearest_enemy, train_labels)
 
     selected_train_rows = []
     binary_matrix, _ = main_reduction(binary_matrix, selected_train_rows, num_samples_needed=None)
     if binary_matrix.shape[1] > 0:
         recursive_reduction(binary_matrix, selected_train_rows)
 
-    print("finalizing...")
+    print("Finalizing...")
     reduced_train = np.array([train_matrix[row_index] for row_index in selected_train_rows])
     return reduced_train
 
 
+def get_nearest_enemy_list(ordered_matrix, train_labels):
+    nearest_enemy = []
+    for row in ordered_matrix:
+        for nn in row:
+            if train_labels[row[0]] != train_labels[nn]:
+                nearest_enemy.append(nn)
+                break
+    return nearest_enemy
+
+
+def create_binary_matrix_df(binary_matrix_numpy, distances, nearest_enemy, train_labels):
+    for i in range(binary_matrix_numpy.shape[1]):
+        for j in range(binary_matrix_numpy.shape[1]):
+            if train_labels[j] == train_labels[i] and distances[i, j] <= distances[i, nearest_enemy[i]]:
+                binary_matrix_numpy[i, j] = 1
+    binary_matrix = pd.DataFrame(binary_matrix_numpy)
+    return binary_matrix
+
+
 def main_reduction(binary_matrix, selected_train_rows, num_samples_needed=None):
-    print("main reduction...")
+    print("Main reduction...")
     converged = False
     if num_samples_needed is None:
         num_samples_needed = float('inf')
@@ -122,7 +111,7 @@ def drop_major_columns(binary_matrix: pd.DataFrame):
 
 def recursive_reduction(binary_matrix, selected_train_rows):
     """search for the next sample that should be placed into the selective subset"""
-    print("starting recursive reduction...")
+    print("Starting recursive reduction...")
     num_remaining_columns = binary_matrix.shape[1]
     results_dict = dict()
     sorted_sums = binary_matrix.sum(axis=1).sort_values(ascending=False)
@@ -149,6 +138,7 @@ def recursive_reduction(binary_matrix, selected_train_rows):
 
 
 def enn(train_matrix, train_labels, knn: ReductionKnnAlgorithm):
+    print("[Applying the ENN...]")
     last_policy = knn.policy
     knn.policy = 'majority'
     train_labels = train_labels.T.reshape(-1)

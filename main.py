@@ -13,8 +13,8 @@ if __name__ == '__main__':
     #     'mixed', force_creation=True)
     # datasets_preprocessed = dr.get_datasets()
 
-    # train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('mixed', 7,
-    #                                                                                             force_creation=False)
+    train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('mixed', 7,
+                                                                                                 force_creation=False)
     # train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('mixed', 7,
     #                                                                                              force_creation=False)
     #
@@ -78,5 +78,5 @@ if __name__ == '__main__':
     # evaluation.evaluate_reduction_knn(1, 'manhattan', 'majority', 'ig', 'mixed')
     # evaluation.evaluate_reduction_knn(1, 'euclidean', 'majority', 'ig', 'numerical')
     # parser.parse_txt() # 'mixed' 3:38:34.385062 DROP3
-    # snn(train_matrix[:100, :], train_matrix_labels[:100, :])
+    snn(train_matrix[:100, :], train_matrix_labels[:100, :])
 

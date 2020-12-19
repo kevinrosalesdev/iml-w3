@@ -1,0 +1,2 @@
+number_of_k,distance,policy,weight,average_accuracy,average_efficiency,average_storage,reduction_technique
+1,manhattan,majority,ig,0.9271093579038554,0.23071019649505614,0.032107828362046446,drop3

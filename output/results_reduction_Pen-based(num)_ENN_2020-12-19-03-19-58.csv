@@ -1,0 +1,2 @@
+number_of_k,distance,policy,weight,average_accuracy,average_efficiency,average_storage,reduction_technique
+1,euclidean,majority,ig,0.9942689935975754,123.23697888851166,0.9946729171715163,enn

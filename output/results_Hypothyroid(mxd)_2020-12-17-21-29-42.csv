@@ -1,3 +1,0 @@
-number_of_k,distance,policy,weight,average_accuracy,average_efficiency
-1,euclidean,majority,,0.9159820772309402,10.074246811866761
-1,euclidean,majority,ig,0.9435417307998379,9.771052742004395

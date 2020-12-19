@@ -92,7 +92,7 @@ def evaluate_reduction_knn(k, distance, policy, weight_type, dataset_type: str):
     dataframe_fold_results = pd.DataFrame(columns=['number_of_k', 'distance', 'policy', 'weight',
                                                    'acc_fold0', 'acc_fold1', 'acc_fold2', 'acc_fold3', 'acc_fold4',
                                                    'acc_fold5', 'acc_fold6', 'acc_fold7', 'acc_fold8', 'acc_fold9'])
-    reduction_techniques = ['enn']
+    reduction_techniques = ['enn', 'drop3']
     start_time = datetime.now()
     train_matrices, train_matrices_labels, test_matrices, test_matrices_labels = dr.get_ten_fold_preprocessed_dataset(
         dataset_type)

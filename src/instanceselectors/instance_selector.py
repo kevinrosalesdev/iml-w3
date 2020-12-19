@@ -1,13 +1,11 @@
 from lazylearning import ReductionKnnAlgorithm
 import numpy as np
-from utils import distances as dt
-import time
 import pandas as pd
 
 
-def snn(train_matrix, train_labels):
+def snn(train_matrix, train_labels, knn: ReductionKnnAlgorithm):
     print("[Applying the SNN...]")
-    distances = dt.euclidean_distances(train_matrix, train_matrix, None)
+    distances = knn.compute_distance(train_matrix, train_matrix, knn.weights)
     ordered_matrix = np.argsort(distances, axis=1)
     nearest_enemy = get_nearest_enemy_list(ordered_matrix, train_labels)
 
@@ -21,7 +19,9 @@ def snn(train_matrix, train_labels):
 
     print("Finalizing...")
     reduced_train = np.array([train_matrix[row_index] for row_index in selected_train_rows])
-    return reduced_train
+    reduced_labels = np.array([train_labels[row_index] for row_index in selected_train_rows])
+    knn.train_matrix = reduced_train
+    knn.train_labels = reduced_labels
 
 
 def get_nearest_enemy_list(ordered_matrix, train_labels):
@@ -35,8 +35,8 @@ def get_nearest_enemy_list(ordered_matrix, train_labels):
 
 
 def create_binary_matrix_df(binary_matrix_numpy, distances, nearest_enemy, train_labels):
-    for i in range(binary_matrix_numpy.shape[1]):
-        for j in range(binary_matrix_numpy.shape[1]):
+    for i in range(binary_matrix_numpy.shape[0]):
+        for j in range(binary_matrix_numpy.shape[0]):
             if train_labels[j] == train_labels[i] and distances[i, j] <= distances[i, nearest_enemy[i]]:
                 binary_matrix_numpy[i, j] = 1
     binary_matrix = pd.DataFrame(binary_matrix_numpy)
@@ -153,13 +153,12 @@ def enn(train_matrix, train_labels, knn: ReductionKnnAlgorithm):
     returned_train_matrix = np.delete(train_matrix, np.array(deleted_indexes), axis=0)
     returned_train_labels = np.delete(train_labels, np.array(deleted_indexes))
     knn.policy = last_policy
-
-    return returned_train_matrix, returned_train_labels
+    knn.train_matrix = returned_train_matrix
+    knn.train_labels = returned_train_labels
 
 
 def drop3(train_matrix, train_labels, knn: ReductionKnnAlgorithm):
-    print("[Applying the ENN first...]")
-    knn.train_matrix, knn.train_labels = enn(train_matrix, train_labels, knn)
+    enn(train_matrix, train_labels, knn)
     print("[Applying the DROP3...]")
 
     returned_train_matrix = knn.train_matrix.copy()
@@ -208,7 +207,8 @@ def drop3(train_matrix, train_labels, knn: ReductionKnnAlgorithm):
 
     returned_train_matrix = np.delete(train_matrix, np.array(deleted_indexes), axis=0)
     returned_train_labels = np.delete(train_labels, np.array(deleted_indexes))
-    return returned_train_matrix, returned_train_labels
+    knn.train_matrix = returned_train_matrix
+    knn.train_labels = returned_train_labels
 
 
 def get_nearest_enemy_distance(sample_index, sample_nearest_neighbors, knn: ReductionKnnAlgorithm):

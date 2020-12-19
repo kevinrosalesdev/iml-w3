@@ -78,5 +78,8 @@ if __name__ == '__main__':
     # evaluation.evaluate_reduction_knn(1, 'manhattan', 'majority', 'ig', 'mixed')
     # evaluation.evaluate_reduction_knn(1, 'euclidean', 'majority', 'ig', 'numerical')
     # parser.parse_txt() # 'mixed' 3:38:34.385062 DROP3
-    snn(train_matrix[:100, :], train_matrix_labels[:100, :])
+    knn = ReductionKnnAlgorithm(k=1, distance='euclidean', policy='majority', weights=None, verbosity=False)
+    storage = knn.fit(train_matrix=train_matrix[:50, :], train_labels=train_matrix_labels[:50, :],
+                      reduction_technique='snn')
+    print(storage)
 

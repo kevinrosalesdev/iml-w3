@@ -6,6 +6,7 @@ from lazylearning.ReductionKnnAlgorithm import ReductionKnnAlgorithm
 import numpy as np
 import datetime
 from utils import parser
+from instanceselectors.instance_selector import snn
 
 if __name__ == '__main__':
     # train_matrices, train_matrices_labels,  test_matrices, test_matrices_labels = dr.get_ten_fold_preprocessed_dataset(

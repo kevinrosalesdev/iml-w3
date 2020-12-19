@@ -72,4 +72,5 @@ if __name__ == '__main__':
     # evaluation.evaluate_knn('mixed', plot_average_accuracy_efficiency=False)
     # evaluation.evaluate_reduction_knn(1, 'euclidean', 'majority', None, 'mixed')
     # parser.parse_txt()
-    snn(train_matrix[:100, :], train_matrix_labels[:100, :])
+    reduced_train_matrix = snn(train_matrix[:100, :], train_matrix_labels[:100, :])
+    print("blaba")

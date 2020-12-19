@@ -45,12 +45,12 @@ if __name__ == '__main__':
     #
     # print(train_matrix.shape, test_matrix.shape)
     #
-    reductionKnn = ReductionKnnAlgorithm(k=3, distance='euclidean', policy='inverse_distance',
-                                         weights=None, verbosity=False)
-    print(reductionKnn.fit(train_matrix=train_matrix[:2000], train_labels=train_matrix_labels[:2000], reduction_technique='drop3'))
-    predictions = reductionKnn.predict(test_matrix)
-    accuracy, execution_time = reductionKnn.evaluate(test_matrix_labels, predictions)
-    print(accuracy, execution_time)
+    # reductionKnn = ReductionKnnAlgorithm(k=3, distance='euclidean', policy='inverse_distance',
+    #                                      weights=None, verbosity=False)
+    # print(reductionKnn.fit(train_matrix=train_matrix[:2000], train_labels=train_matrix_labels[:2000], reduction_technique='drop3'))
+    # predictions = reductionKnn.predict(test_matrix)
+    # accuracy, execution_time = reductionKnn.evaluate(test_matrix_labels, predictions)
+    # print(accuracy, execution_time)
     #
     # knn = KnnAlgorithm(k=7, distance='euclidean', policy='inverse_distance',
     #                    weights=None, verbosity=False)
@@ -71,8 +71,11 @@ if __name__ == '__main__':
     # evaluation.evaluate_knn('numerical', plot_average_accuracy_efficiency=False) # Total execution time = 1 day, 4:57:17.256373
     # evaluation.evaluate_knn('mixed', plot_average_accuracy_efficiency=False)
 
-    evaluation.evaluate_reduction_knn(1, 'manhattan', 'majority', 'ig', 'mixed') # 0:12:29.763492 ENN
-    evaluation.evaluate_reduction_knn(1, 'euclidean', 'majority', 'ig', 'numerical') # 3:28:13.615468 ENN
-    # parser.parse_txt()
+    # 'mixed' 0:12:29.763492 ENN
+    # 'numerical' 3:28:13.615468 ENN
+    # 'mixed' 3:38:34.385062 DROP3
+    # evaluation.evaluate_reduction_knn(1, 'manhattan', 'majority', 'ig', 'mixed')
+    # evaluation.evaluate_reduction_knn(1, 'euclidean', 'majority', 'ig', 'numerical')
+    # parser.parse_txt() # 'mixed' 3:38:34.385062 DROP3
     # snn(train_matrix[:100, :], train_matrix_labels[:100, :])
 

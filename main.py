@@ -32,7 +32,7 @@ if __name__ == '__main__':
     # accuracy, execution_time = reductionKnn.evaluate(test_matrix_labels, predictions)
     # print(accuracy, execution_time)
     #
-    # knn = KnnAlgorithm(k=7, distance='euclidean', policy='inverse_distance',
+    # knn = KnnAlgorithm(k=3, distance='euclidean', policy='inverse_distance',
     #                    weights=None, verbosity=False)
     # knn.fit(train_matrix=train_matrix, train_labels=train_matrix_labels)
     # print(knn.train_matrix.shape)
@@ -45,13 +45,12 @@ if __name__ == '__main__':
     #
     # print(train_matrix.shape, test_matrix.shape)
     #
-    # reductionKnn = ReductionKnnAlgorithm(k=7, distance='euclidean', policy='inverse_distance',
-    #                                      weights=None, verbosity=False)
-    # reductionKnn.fit(train_matrix=train_matrix, train_labels=train_matrix_labels, reduction_technique='enn')
-    # print(reductionKnn.train_matrix.shape)
-    # predictions = reductionKnn.predict(test_matrix)
-    # accuracy, execution_time = reductionKnn.evaluate(test_matrix_labels, predictions)
-    # print(accuracy, execution_time)
+    reductionKnn = ReductionKnnAlgorithm(k=3, distance='euclidean', policy='inverse_distance',
+                                         weights=None, verbosity=False)
+    print(reductionKnn.fit(train_matrix=train_matrix[:2000], train_labels=train_matrix_labels[:2000], reduction_technique='drop3'))
+    predictions = reductionKnn.predict(test_matrix)
+    accuracy, execution_time = reductionKnn.evaluate(test_matrix_labels, predictions)
+    print(accuracy, execution_time)
     #
     # knn = KnnAlgorithm(k=7, distance='euclidean', policy='inverse_distance',
     #                    weights=None, verbosity=False)

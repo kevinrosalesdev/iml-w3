@@ -7,7 +7,7 @@ def parse_txt():
     dataframe_results = pd.DataFrame(columns=['number_of_k', 'distance', 'policy', 'weight', 'acc_fold0', 'acc_fold1',
                                               'acc_fold2', 'acc_fold3', 'acc_fold4', 'acc_fold5', 'acc_fold6',
                                               'acc_fold7', 'acc_fold8', 'acc_fold9'])
-    file_list = os.listdir(r"output")
+    file_list = os.listdir(r"output/results_Pen-based")
     ks = [1, 3, 5, 7]
 
     for file in file_list:
@@ -36,7 +36,7 @@ def parse_txt():
 
 
             accuracies = []
-            for line in open(f"output/{file}", 'r'):
+            for line in open(f"output/results_Pen-based/{file}", 'r'):
                 if '*' not in line and 'Accuracy: ' in line:
                     result = re.findall(r'\d+\.\d+', line)
                     accuracies.append(result[0])

@@ -21,7 +21,7 @@ def snn(train_matrix, train_labels, knn: ReductionKnnAlgorithm):
     reduced_train = np.array([train_matrix[row_index] for row_index in selected_train_rows])
     reduced_labels = np.array([train_labels[row_index] for row_index in selected_train_rows])
     knn.train_matrix = reduced_train
-    knn.train_labels = reduced_labels
+    knn.train_labels = reduced_labels.T.reshape(-1)
 
 
 def get_nearest_enemy_list(ordered_matrix, train_labels):
@@ -51,15 +51,21 @@ def main_reduction(binary_matrix, selected_train_rows, num_samples_needed=None):
         tot_samples_added = 0
     else:
         tot_samples_added = 1
+
+    print(f"Main reduction START: tot_samples_added= {tot_samples_added} selected_train_rows= {len(selected_train_rows)}")
     while not converged:
+        print(f"Main reduction: {binary_matrix.shape}")
         binary_matrix, num_samples_added, no_change_step_1 = select_unitary_rows(binary_matrix, selected_train_rows)
         tot_samples_added += num_samples_added
         binary_matrix, no_change_step_2 = drop_minor_rows(binary_matrix)
         binary_matrix, no_change_step_3 = drop_major_columns(binary_matrix)
 
+        print(f"Main reduction: tot_samples_added= {tot_samples_added} == num_samples_needed= {num_samples_needed}  {tot_samples_added == num_samples_needed}")
         if tot_samples_added == num_samples_needed:
             break
         converged = no_change_step_1 and no_change_step_2 and no_change_step_3
+        print(f"Main reduction: converged= {converged}")
+    print(f"Main reduction END: {binary_matrix.shape} tot_samples_added= {tot_samples_added} selected_train_rows= {len(selected_train_rows)}")
     return binary_matrix, tot_samples_added
 
 
@@ -103,7 +109,7 @@ def drop_major_columns(binary_matrix: pd.DataFrame):
     for label in binary_matrix.columns:
         curr_col = binary_matrix[label]
         curr_matrix = binary_matrix.drop(label, axis=1)
-        if curr_matrix.le(curr_col, axis=0).all(0).any():
+        if curr_matrix.le(curr_col, axis=0).all(axis=0).any():
             binary_matrix = curr_matrix
             no_changes = False
     return binary_matrix, no_changes
@@ -112,29 +118,62 @@ def drop_major_columns(binary_matrix: pd.DataFrame):
 def recursive_reduction(binary_matrix, selected_train_rows):
     """search for the next sample that should be placed into the selective subset"""
     print("Starting recursive reduction...")
+    print(f"recursive_reduction START: {binary_matrix.shape}")
     num_remaining_columns = binary_matrix.shape[1]
+    closer_rate = dict()
     results_dict = dict()
     sorted_sums = binary_matrix.sum(axis=1).sort_values(ascending=False)
     for idx in binary_matrix.index:
         cum_sums = sorted_sums.drop(idx).cumsum()
         minimum_rows = np.argmax(cum_sums.values >= num_remaining_columns)+1
         results_dict[idx] = minimum_rows
+    print(f"recursive_reduction: absolute_min list of values= {results_dict.values()}")
     for absolute_min in set(results_dict.values()):
+        print("***************")
+        print(f"recursive_reduction: actual absolute_min= {absolute_min}")
         selected_labels = [k for k, v in results_dict.items() if v == absolute_min]
+        print(f"recursive_reduction: len= {len(selected_labels)} selected_labels= {selected_labels}")
         for row_label in selected_labels:
+            print("---------------")
+            print(f"recursive_reduction: actual absolute_min= {absolute_min}")
+            print(f"recursive_reduction: row_label= {row_label}")
             # remove selected row and columns with 1 bits in the removed row
             temp_binary_matrix = binary_matrix.copy()
+            print(f"recursive_reduction: temp_binary_matrix start= {temp_binary_matrix.shape}")
+
             subset_row = temp_binary_matrix.loc[row_label]
             temp_binary_matrix = temp_binary_matrix.loc[:, subset_row == 0]
             temp_binary_matrix.drop(row_label, inplace=True)
             selected_train_rows.append(row_label)
+            print(f"recursive_reduction: temp_binary_matrix after selecting row= {temp_binary_matrix.shape}")
             # Recursion
             temp_binary_matrix, tot_samples_added = main_reduction(temp_binary_matrix, selected_train_rows,
                                                                    num_samples_needed=absolute_min)
+            closer_rate[row_label] = tot_samples_added/absolute_min
+            print(f"recursive_reduction: closer_rate= {tot_samples_added/absolute_min}")
+            print(f"recursive_reduction: temp_binary_matrix= {temp_binary_matrix.shape}")
+            print(f"recursive_reduction: tot_samples_added= {tot_samples_added}")
+            print(f"recursive_reduction: tot_samples_added={tot_samples_added} != absolute_min= {absolute_min}? {tot_samples_added != absolute_min}")
+            print(f"recursive_reduction: selected_train_rows BEFORE pop= {len(selected_train_rows)}")
             if tot_samples_added != absolute_min:
-                selected_train_rows.pop(-tot_samples_added)
+                selected_train_rows = selected_train_rows[:-tot_samples_added]
+                print(f"recursive_reduction: selected_train_rows AFTER pop= {len(selected_train_rows)}")
             else:
+                print(f"recursive_reduction END: {temp_binary_matrix.shape} tot_samples_added= {tot_samples_added} selected_train_rows= {len(selected_train_rows)}")
                 return
+    print(f"LAST recursive_reduction: LAST binary_matrix= {binary_matrix.shape}")
+    last_final_selected_row = max(closer_rate, key=closer_rate.get)
+    print(f"LAST recursive_reduction: last_final_selected_row= {last_final_selected_row} value= {closer_rate[last_final_selected_row]}")
+
+    temp_binary_matrix = binary_matrix.copy()
+    subset_row = temp_binary_matrix.loc[last_final_selected_row]
+    temp_binary_matrix = temp_binary_matrix.loc[:, subset_row == 0]
+    temp_binary_matrix.drop(last_final_selected_row, inplace=True)
+    selected_train_rows.append(last_final_selected_row)
+    print(f"LAST recursive_reduction: temp_binary_matrix after selecting row= {temp_binary_matrix.shape}")
+    # Final Recursion
+    _, __ = main_reduction(temp_binary_matrix, selected_train_rows, num_samples_needed=float('inf'))
+
 
 
 def enn(train_matrix, train_labels, knn: ReductionKnnAlgorithm):

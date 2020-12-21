@@ -1,0 +1,9 @@
+---------------------------------------------------
+Evaluation for Hypothyroid (mxd) (reduced) - distance = manhattan, policy = majority, weight = ig, reduction_technique = snn
+k = 1
+-----------------
+Fold n°0
+Accuracy: 0.128
+Execution time: 0.3184387683868408
+Storage: 0.04180158963791581
+-----------------

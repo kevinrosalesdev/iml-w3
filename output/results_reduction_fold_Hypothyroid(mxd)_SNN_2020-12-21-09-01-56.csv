@@ -1,0 +1,2 @@
+number_of_k,distance,policy,weight,acc_fold0,acc_fold1,acc_fold2,acc_fold3,acc_fold4,acc_fold5,acc_fold6,acc_fold7,acc_fold8,acc_fold9,reduction_technique
+1,manhattan,majority,ig,0.128,,,,,,,,,,snn

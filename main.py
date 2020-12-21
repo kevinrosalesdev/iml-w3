@@ -12,11 +12,11 @@ if __name__ == '__main__':
     # train_matrices, train_matrices_labels,  test_matrices, test_matrices_labels = dr.get_ten_fold_preprocessed_dataset(
     #     'mixed', force_creation=True)
     # datasets_preprocessed = dr.get_datasets()
-
-    train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('mixed', 7,
-                                                                                                 force_creation=False)
+    #
     # train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('mixed', 7,
     #                                                                                              force_creation=False)
+    # train_matrix, train_matrix_labels, test_matrix, test_matrix_labels = dr.read_processed_data('mixed', 1,
+    #                                                                                             force_creation=False)
     #
     # print(train_matrix.shape, test_matrix.shape)
 
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     # accuracy, execution_time = knn.evaluate(test_matrix_labels, predictions)
     # print(accuracy, execution_time)
 
-    # evaluation.evaluate_knn('mixed', plot_average_accuracy_efficiency=False) # Total execution time = 3:16:45.511944
+    # evaluation.evaluate_knn('numerical', plot_average_accuracy_efficiency=False) # Total execution time = 3:16:45.511944
     # average_accuracy_list = [0.8586822566933352, 0.9143757804897203, 0.77757804897203, 0.9743757804897203]
     # average_efficiency_list = [17.49811363220215, 18.34249014854431, 15.943757804897203, 16.943757804897203]
     # plotter.plot_accuracy(average_accuracy_list, title='Hypothyroid (mxd) - distance = euclidean, policy = majority, weight = None', file_title='accuracy')
@@ -77,9 +77,14 @@ if __name__ == '__main__':
     # 'mixed' 3:38:34.385062 DROP3
     # evaluation.evaluate_reduction_knn(1, 'manhattan', 'majority', 'ig', 'mixed')
     # evaluation.evaluate_reduction_knn(1, 'euclidean', 'majority', 'ig', 'numerical')
-    # parser.parse_txt() # 'mixed' 3:38:34.385062 DROP3
-    knn = ReductionKnnAlgorithm(k=1, distance='euclidean', policy='majority', weights=None, verbosity=False)
-    storage = knn.fit(train_matrix=train_matrix[:50, :], train_labels=train_matrix_labels[:50, :],
-                      reduction_technique='snn')
-    print(storage)
+    parser.parse_txt()
+    # knn = ReductionKnnAlgorithm(k=1, distance='manhattan', policy='majority', weights=None, verbosity=False)
+    # storage = knn.fit(train_matrix=train_matrix, train_labels=train_matrix_labels,
+    #                  reduction_technique='snn')
+    # print(storage)
+    # print(knn.train_matrix)
+    # print(knn.train_labels)
+
+    # evaluation.evaluate_reduction_knn(1, 'manhattan', 'majority', 'ig', 'mixed')
+
 

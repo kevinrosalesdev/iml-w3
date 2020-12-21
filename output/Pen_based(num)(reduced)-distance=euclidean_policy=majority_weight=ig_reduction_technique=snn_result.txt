@@ -1,0 +1,9 @@
+---------------------------------------------------
+Evaluation for Pen-based (num) (reduced) - distance = euclidean, policy = majority, weight = ig, reduction_technique = snn
+k = 1
+-----------------
+Fold n°0
+Accuracy: 0.3888888888888889
+Execution time: 0.8826780319213867
+Storage: 0.008692136648473823
+-----------------

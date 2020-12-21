@@ -14,3 +14,5 @@ src/utils/__pycache__/
 src/lazylearning/__pycache__/
 
 src/instanceselectors/__pycache__/
+
+.ipynb_checkpoints/
